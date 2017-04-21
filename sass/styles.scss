@@ -10,6 +10,7 @@ $purple-primary: rgba(84, 76, 133, .8);
 $purple-overlay: rgba(44,42,54,0.8);
 $purple-box-shadow: rgba(44,42,54,0.451);
 $dark-blue-primary: rgb(54, 70, 93);
+$dark-red-primary: #5d3a36;
 $light-grey-accent: #f2f2f2;
 
 $purple-gradient: linear-gradient(0deg, rgba(110, 177, 181, .8), rgba(84, 76, 133, .8));
@@ -20,12 +21,20 @@ $purple-gradient: linear-gradient(0deg, rgba(110, 177, 181, .8), rgba(84, 76, 13
   }
 }
 
+@mixin transition($args...) {
+  -webkit-transition: $args;
+  -moz-transition: $args;
+  -ms-transition: $args;
+  -o-transition: $args;
+  transition: $args;
+}
+
 body, html {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
-    font-family: 'Unica One'
+    font-family: 'Unica One';
 }
 
 *, *::before, *::after {
@@ -36,7 +45,7 @@ body, html {
     width: 55px;
     height: 55px;
     color: $light-grey-accent;
-    position: absolute;
+    position: fixed;
     bottom: 15px;
     border: 3px solid $light-grey-accent;
     border-radius: 50%;
@@ -44,6 +53,11 @@ body, html {
     text-align: center;
     opacity: .6;
     cursor: pointer;
+    @include transition(all 0.8s ease-in-out);
+    &:hover {
+      color: $light-grey-accent;
+      text-decoration: none;
+    }
 }
 
 #profileWrap {
@@ -55,8 +69,10 @@ body, html {
     background-image: $purple-gradient, url("https://source.unsplash.com/s6L0uQyprpE/5616×3744");
     background-size: cover;
     background-attachment: fixed;
+    background-position: center center;
     .profile {
-        position: relative;
+        position: fixed;
+        z-index: 1;
         width: 450px;
         height: 500px;
         background-color: $purple-overlay;
@@ -118,30 +134,21 @@ body, html {
     }
 }
 
-#workWrap {
+#portfolio {
   width: 100%;
   height: 100%;
   background: $dark-blue-primary;
-  @include mq($bp-md, max) {
+  position: relative;
+  z-index: 100;
+  @include mq($bp-sm, max) {
     height: auto;
-  }
-  h1 {
-    margin-top: 0;
-    text-align: center;
-    color: white;
-    font-size: 60px;
-    font-weight: bold;
-    padding-top: 20px;
-  }
-  hr {
-    border-top: 3px solid white;
-    width: 70%;
   }
   .workGrid {
     position: relative;
     padding-top: 15px;
     height: 100%;
     width: 100%;
+    z-index: 100;
   }
   .row-fluid {
     width: 100%;
@@ -150,17 +157,87 @@ body, html {
   .col-md-4 {
     height: 33%;
     position: relative;
-    padding: 10px;
-    @include mq($bp-md, max) {
-      height: 400px;
+    padding: 5px;
+    @include mq($bp-sm, max) {
+      height: 350px;
     }
     .innerGrid {
       width: 100%;
       height: 100%;
-      background: url('../../assets/images/Capture.jpg');
+      position: relative;
+      cursor: pointer;
+      z-index: 100;
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: black;
+        opacity: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        @include transition(all 0.2s ease-out);
+        h1 {
+          font-size: 42px;
+          font-weight: bold;
+          text-align: center;
+          color: white;
+          display: none;
+        }
+        p {
+          font-size: 18px;
+          text-align: center;
+          color: white;
+          display: none;
+        }
+      }
+    }
+    #one {
+      background: url('../../assets/images/outdoors.jpg');
       background-size: cover;
-      background-position: center center;
-      border: 1px solid grey;
+      background-position: top center;
+    }
+    #two {
+      background: url('../../assets/images/camper.jpg');
+      background-size: cover;
+      background-position: top center;
+    }
+    #three {
+      background: url('../../assets/images/agency2.jpg');
+      background-size: cover;
+      background-position: top center;
+    }
+    #four {
+      background: url('../../assets/images/pic-search2.jpg');
+      background-size: cover;
+      background-position: top center;
+    }
+    #five {
+      background: url('../../assets/images/apple.jpg');
+      background-size: cover;
+      background-position: top center;
+    }
+    #six {
+      background: url('../../assets/images/timestamp.jpg');
+      background-size: cover;
+      background-position: top center;
+    }
+    #seven {
+      background: url('../../assets/images/countdown.jpg');
+      background-size: cover;
+      background-position: top center;
+    }
+    #eight {
+      background: url('../../assets/images/recipe-box.jpg');
+      background-size: cover;
+      background-position: top center;
+    }
+    #nine {
+      background: url('../../assets/images/tictactoe.JPG');
+      background-size: cover;
+      background-position: top center;
     }
   }
 }

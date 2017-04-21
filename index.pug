@@ -3,14 +3,16 @@ html
     head
         meta(charset="utf-8")
 
-        title Zach Mitchell Dot Com
+        title Zach Mitchell
         meta(name="description" content="Single page countdown template")
         meta(name="author" content="Zach Mitchell")
 
         link(href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css", rel="stylesheet")
         link(href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css", rel="stylesheet")
         link(href="https://fonts.googleapis.com/css?family=Unica+One" rel="stylesheet")
-        link(rel="stylesheet" href="styles/css/styles.css")
+        link(href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" rel="stylesheet")
+        link(rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png")
+        link(rel="stylesheet" href="css/styles.css")
     
     body
         div(id="profileWrap")
@@ -21,7 +23,7 @@ html
                 p Front-end developer
                 ul
                     li 
-                        a(href="https://www.linkedin.com/in/zach-mitchell-231348121/")
+                        a(href="https://www.linkedin.com/in/zjmitche/")
                             i(class="fa fa-linkedin")
                     li 
                         a(href="https://github.com/zjmitche")
@@ -32,29 +34,84 @@ html
                     li 
                         a(href="mailto:zjmitche@gmail.com")
                             i(class="fa fa-envelope")
-            div(class="fa fa-angle-down")
-        section(id="workWrap")
+
+            a(class="fa fa-angle-down" href="#portfolio")
+
+        section(id="portfolio")
             div(class="workGrid container-fluid")
                 div(class="row-fluid")
                     div(class="col-md-4")
-                        div(class="innerGrid")
+                        a(href="https://zjmitche.github.io/outdoors-template/")
+                            div(class="innerGrid" id="one")
+                                div(class="overlay")
+                                    div(class="flexOverlay")
+                                        h1 OUTDOORS TEMPLATE
+                                        p HTML | SCSS | JQUERY
+
                     div(class="col-md-4")
-                        div(class="innerGrid")
+                        a(href="https://camperleaderboard.herokuapp.com/")
+                            div(class="innerGrid" id="two")
+                                div(class="overlay")
+                                    div(class="flexOverlay")
+                                        h1 LEADERBOARD
+                                        p HTML | CSS | REACT | WEBPACK
+
                     div(class="col-md-4")
-                        div(class="innerGrid")
+                        a(href="https://zjmitche.github.io/agency-template/")
+                            div(class="innerGrid" id="three")
+                                div(class="overlay")
+                                    div(class="flexOverlay")
+                                        h1 AGENCY TEMPLATE
+                                        p HTML | SCSS | JQUERY
+
                     div(class="col-md-4")
-                        div(class="innerGrid")
+                        a(href="https://bing-pic-search.herokuapp.com/")
+                            div(class="innerGrid" id="four")
+                                div(class="overlay")
+                                    div(class="flexOverlay")
+                                        h1 PIC SEARCH API
+                                        p HTML | CSS | NODE | MONGODB
+
                     div(class="col-md-4")
-                        div(class="innerGrid")
+                        a(href="https://zjmitche.github.io/apple-clone/")
+                            div(class="innerGrid" id="five")
+                                div(class="overlay")
+                                    div(class="flexOverlay")
+                                        h1 APPLE CLONE
+                                        p PUG | SCSS | JQUERY
+
                     div(class="col-md-4")
-                        div(class="innerGrid")
+                        a(href="https://timestampzm.herokuapp.com/")
+                            div(class="innerGrid" id="six")
+                                div(class="overlay")
+                                    div(class="flexOverlay")
+                                        h1 TIMESTAMP API
+                                        p HTML | CSS | NODE | EXPRESS
+
                     div(class="col-md-4")
-                        div(class="innerGrid")
+                        a(href="https://zjmitche.github.io/coming-soon-template/")
+                            div(class="innerGrid" id="seven")
+                                div(class="overlay")
+                                    div(class="flexOverlay")
+                                        h1 COUNTDOWN TEMPLATE
+                                        p PUG | SASS | JQUERY
+
                     div(class="col-md-4")
-                        div(class="innerGrid")
+                        a(href="https://zjmitche-recipe-box.herokuapp.com/")
+                            div(class="innerGrid" id="eight")
+                                div(class="overlay")
+                                    div(class="flexOverlay")
+                                        h1 RECIPE BOX
+                                        p HTML | CSS | REACT | WEBPACK
+
                     div(class="col-md-4")
-                        div(class="innerGrid")
+                        a(href="https://zjmitche.github.io/tic-tac-toe")
+                            div(class="innerGrid" id="nine")
+                                div(class="overlay")
+                                    div(class="flexOverlay")
+                                        h1 TIC TAC TOE
+                                        p HTML | CSS | VANILLA JS
 
 
         script(type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.js")
-        script(src="js/scripts.js")
+        script(src="../js/index.js")
