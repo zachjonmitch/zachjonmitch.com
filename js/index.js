@@ -30,6 +30,7 @@ $(document).ready(function() {
         $whole.animate({
             scrollTop: $portfolio.offset().top
         }, 'slow');
+        toggleScroll = true;
     });
     
     //Porfolio bounce animation
