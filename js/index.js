@@ -4,19 +4,23 @@ $(document).ready(function() {
     var $whole = $('html, body');
     var $innerGrid = $('.innerGrid');
     var $a = $('a');
+    
+    var toggleScroll = false;
 
     //Smooth scroll down animation
     $(window).on('mousewheel', function(event) {
         if ($(this).width() > 990) {
-            if (event.originalEvent.wheelDelta >= 0) {
+            if (event.originalEvent.wheelDelta >= 0 && toggleScroll === true) {
                 $whole.stop().animate({
                     scrollTop: $profileWrap.offset().top
                 }, 'slow');
+                toggleScroll = false;
             }
-            else {
+    else if (event.originalEvent.wheelDelta <= 0 && toggleScroll === false) {
                 $whole.stop().animate({
                     scrollTop: $portfolio.offset().top
                 }, 'slow');
+                toggleScroll = true;
             }
         }
     });
