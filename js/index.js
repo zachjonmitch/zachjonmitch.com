@@ -45,5 +45,4 @@ $(document).ready(function() {
         $(this).find('.overlay').css('opacity', '0');
         $(this).find('h1, p').css('display', 'none');
     });
-
 });
