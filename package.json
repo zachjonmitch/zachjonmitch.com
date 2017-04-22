@@ -5,7 +5,7 @@
   "main": "js/index.js",
   "scripts": {
     "build": "start npm run build-pug && start npm run build-scss && start npm run build-js",
-    "deploy": "git subtree push --prefix dist origin gh-pages",
+    "deploy": "git push -u origin master && git subtree push --prefix dist origin gh-pages",
     "build-pug": "pug --watch index.pug -o dist",
     "build-scss": "sass --watch sass/styles.scss:dist/css/styles.css --style compressed",
     "build-js": "onchange \"js/*.js\" -- npm run uglify",
