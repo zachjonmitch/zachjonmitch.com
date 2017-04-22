@@ -7,7 +7,7 @@ $(document).ready(function() {
 
     //Smooth scroll down animation
     $(window).on('mousewheel', function(event) {
-        if ($(this).width() >= 1024) {
+        if ($(this).width() > 990) {
             if (event.originalEvent.wheelDelta >= 0) {
                 $whole.stop().animate({
                     scrollTop: $profileWrap.offset().top
