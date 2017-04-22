@@ -6,6 +6,7 @@ $(document).ready(function() {
     var $a = $('a');
     
     var toggleScroll = false;
+    var resizeTimeout;
 
     //Smooth scroll down animation
     $(window).on('mousewheel', function(event) {
@@ -35,14 +36,18 @@ $(document).ready(function() {
     
     //Porfolio bounce animation
     $innerGrid.hover(function() {
-        $(this).find('h1, p').css('display', 'block').addClass('animated bounceIn');
-        $(this).find('.overlay').css('opacity', '.9');
+        if(window.matchMedia('(min-width: 990px)').matches) {
+            $(this).find('h1, p').css('display', 'block').addClass('animated bounceIn');
+            $(this).find('.overlay').css('opacity', '.9');
 
-        $(this).find('h1, p').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-            $(this).removeClass('animated bounceIn');
-        });
+            $(this).find('h1, p').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+                $(this).removeClass('animated bounceIn');
+            });
+        }
     }, function() {
-        $(this).find('.overlay').css('opacity', '0');
-        $(this).find('h1, p').css('display', 'none');
+        if(window.matchMedia('(min-width: 990px)').matches) {
+            $(this).find('.overlay').css('opacity', '0');
+            $(this).find('h1, p').css('display', 'none');
+        }
     });
 });

@@ -54,6 +54,9 @@ body, html {
     opacity: .6;
     cursor: pointer;
     @include transition(all 0.8s ease-in-out);
+    @include mq($bp-md, max) {
+      position: absolute;
+    }
     &:hover {
       color: $light-grey-accent;
       text-decoration: none;
@@ -79,6 +82,9 @@ body, html {
         box-shadow: 0rem 3rem 3.125rem 0rem $purple-box-shadow;
         border-radius: 10px;
         text-align: center;
+        @include mq($bp-md, max) {
+          position: absolute;
+        }
         @include mq($bp-sm, max) {
           width: 100%;
         }
@@ -182,18 +188,27 @@ body, html {
         justify-content: center;
         align-items: center;
         @include transition(all 0.2s ease-out);
+        @include mq($bp-md, max) {
+          opacity: .8;
+        }
         h1 {
           font-size: 42px;
           font-weight: bold;
           text-align: center;
           color: white;
           display: none;
+          @include mq($bp-md, max) {
+            display: block;
+          }
         }
         p {
           font-size: 18px;
           text-align: center;
           color: white;
           display: none;
+          @include mq($bp-md, max) {
+            display: block;
+          }
         }
       }
     }
