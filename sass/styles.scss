@@ -1,7 +1,7 @@
 $bp-xxlg: 2560px;
 $bp-xlg: 1920px;
 $bp-lg: 1440px;
-$bp-md: 1024px;
+$bp-md: 990px;
 $bp-sm: 768px;
 $bp-xs: 480px;
 
@@ -140,7 +140,7 @@ body, html {
   background: $dark-blue-primary;
   position: relative;
   z-index: 100;
-  @include mq($bp-sm, max) {
+  @include mq($bp-md, max) {
     height: auto;
   }
   .workGrid {
@@ -158,6 +158,9 @@ body, html {
     height: 33%;
     position: relative;
     padding: 5px;
+    @include mq($bp-md, max) {
+      height: 450px;
+    }
     @include mq($bp-sm, max) {
       height: 350px;
     }

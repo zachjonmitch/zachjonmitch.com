@@ -7,7 +7,7 @@
     "build": "start npm run build-pug && start npm run build-scss && start npm run build-js",
     "deploy": "git push -u origin master && git subtree push --prefix dist origin gh-pages",
     "build-pug": "pug --watch index.pug -o dist",
-    "build-scss": "sass --watch sass/styles.scss:dist/css/styles.css --style compressed",
+    "build-scss": "sass --watch sass/styles.scss:dist/css/styles.min.css --style compressed",
     "build-js": "onchange \"js/*.js\" -- npm run uglify",
     "uglify": "uglifyjs js/*.js -m -c -o dist/js/index.min.js",
     "imagemin": "imagemin assets/images/* --out-dir=dist/img"
