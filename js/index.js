@@ -6,7 +6,6 @@ $(document).ready(function() {
     var $a = $('a');
     
     var toggleScroll = false;
-    var resizeTimeout;
 
     //Smooth scroll down animation
     $(window).on('mousewheel', function(event) {
