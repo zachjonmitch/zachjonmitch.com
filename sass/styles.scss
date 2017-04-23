@@ -87,6 +87,7 @@ body, html {
         }
         @include mq($bp-sm, max) {
           width: 100%;
+          border-radius: 0;
         }
         @include mq($bp-xs, max) {
           height: 400px;
@@ -101,7 +102,7 @@ body, html {
             background-size: 128px 170px;
             background-position: center center;
             background-repeat: no-repeat;
-            @include mq(1024px, max) {
+            @include mq($bp-xs, max) {
               height: 115px;
               width: 115px;
               background-size: 115px 150px;
@@ -125,7 +126,7 @@ body, html {
             font-size: 19px;
             color: $light-grey-accent;
             @include mq($bp-xs, max) {
-              font-size: 15px;
+              font-size: 17px;
             }
         }
         ul {
@@ -179,6 +180,9 @@ body, html {
     height: 100%;
     width: 100%;
     z-index: 100;
+    @include mq($bp-md, max) {
+      padding: 5px;
+    }
   }
   .row-fluid {
     width: 100%;
@@ -192,7 +196,7 @@ body, html {
       height: 450px;
     }
     @include mq($bp-sm, max) {
-      height: 350px;
+      height: 325px;
     }
     .innerGrid {
       width: 100%;
