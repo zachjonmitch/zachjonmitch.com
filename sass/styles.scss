@@ -7,7 +7,7 @@ $bp-xs: 480px;
 
 $teal-primary: rgba(110, 177, 181, .8);
 $purple-primary: rgba(84, 76, 133, .8);
-$purple-overlay: rgba(44,42,54,0.8);
+$purple-overlay: rgba(44,42,54,0.9);
 $purple-box-shadow: rgba(44,42,54,0.451);
 $dark-blue-primary: rgb(54, 70, 93);
 $dark-red-primary: #5d3a36;
@@ -96,12 +96,13 @@ body, html {
             width: 128px;
             height: 128px;
             margin: 50px auto 20px auto;
-            border: 2px solid grey;
+            border: 1px solid #ccc;
             border-radius: 50%;
-            background-image: url("../img/profile.jpg");
+            background-image: url("../img/profile-default.jpg");
             background-size: 128px 170px;
-            background-position: center center;
+            background-position: center -10px;
             background-repeat: no-repeat;
+            box-shadow: 0px 30px 30px rgba(0,0,0,0.3);
             @include mq($bp-xs, max) {
               height: 115px;
               width: 115px;
@@ -111,7 +112,7 @@ body, html {
         }
         hr {
           width: 15%;
-          border-top: 2px solid white;
+          border-top: 2px solid #97A3D8;
         }
         h1 {
             font-size: 50px;
@@ -159,7 +160,7 @@ body, html {
           }
           &:hover {
             color: $teal-primary;
-            border: 1px solid $teal-primary;
+            border: 1px solid #97A3D8;
           }
         }
     }
