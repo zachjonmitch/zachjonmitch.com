@@ -53,7 +53,7 @@ body, html {
     text-align: center;
     opacity: .6;
     cursor: pointer;
-    @include transition(all 0.8s ease-in-out);
+    @include transition(all 0.5s ease-in-out);
     @include mq($bp-md, max) {
       position: absolute;
     }
@@ -205,6 +205,17 @@ body, html {
       position: relative;
       cursor: pointer;
       z-index: 100;
+      &:hover {
+        .overlay {
+          opacity: 1;
+          p {
+          opacity: 1;
+          }
+          h1 {
+            opacity: 1;
+          }
+        }
+      }
       .overlay {
         position: absolute;
         top: 0;
@@ -216,16 +227,12 @@ body, html {
         display: flex;
         justify-content: center;
         align-items: center;
-        @include transition(all 0.2s ease-out);
-        @include mq($bp-md, max) {
-          opacity: .8;
-        }
         h1 {
           font-size: 42px;
           font-weight: bold;
           text-align: center;
           color: white;
-          display: none;
+          opacity: 0;
           @include mq($bp-md, max) {
             display: block;
           }
@@ -234,7 +241,7 @@ body, html {
           font-size: 18px;
           text-align: center;
           color: white;
-          display: none;
+          opacity: 0;
           @include mq($bp-md, max) {
             display: block;
           }
