@@ -100,15 +100,14 @@ body, html {
             margin: 50px auto 20px auto;
             border: 1px solid #ccc;
             border-radius: 50%;
-            background-image: url("../img/profile-bw.jpg");
-            background-size: 128px 170px;
-            background-position: center -10px;
+            background-image: url("../img/g2-profile-cropped-sm.jpg");
+            background-size: cover;
+            background-position: top;
             background-repeat: no-repeat;
             box-shadow: 0px 30px 30px rgba(0,0,0,0.3);
             @include mq($bp-xs, max) {
               height: 115px;
               width: 115px;
-              background-size: 115px 150px;
               margin-top: 25px;
             }
         }
@@ -267,12 +266,12 @@ body, html {
       background-position: top center;
     }
     #two {
-      background: url('../img/rmrbullets.JPG');
+      background: url('../img/rmr-bullets-v2.JPG');
       background-size: cover;
       background-position: top center;
     }
     #three {
-      background: url('../img/daymaker.JPG');
+      background: url('../img/g2-buyer-intent-v3.jpg');
       background-size: cover;
       background-position: top center;
     }
@@ -282,7 +281,7 @@ body, html {
       background-position: top center;
     }
     #five {
-      background: url('../img/redwall.JPG');
+      background: url('../img/g2-track.jpg');
       background-size: cover;
       background-position: top center;
     }
