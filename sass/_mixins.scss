@@ -1,0 +1,57 @@
+@use 'variables';
+
+@mixin min-width($breakpoint) {
+  @if $breakpoint == sm {
+    @media (min-width: variables.$bp-sm) {
+      @content;
+    }
+  } @else if $breakpoint == md {
+    @media (min-width: variables.$bp-md) {
+      @content;
+    }
+  } @else if $breakpoint == lg {
+    @media (min-width: variables.$bp-lg) {
+      @content;
+    }
+  } @else if $breakpoint == xl {
+    @media (min-width: variables.$bp-xl) {
+      @content;
+    }
+  } @else if $breakpoint == xxl {
+    @media (min-width: variables.$bp-xxl) {
+      @content;
+    }
+  } @else if $breakpoint == xxxl {
+    @media (min-width: variables.$bp-xxxl) {
+      @content;
+    }
+  }
+}
+
+@mixin max-width($breakpoint) {
+  @if $breakpoint == sm {
+    @media (max-width: #{variables.$bp-sm - 1px}) {
+      @content;
+    }
+  } @else if $breakpoint == md {
+    @media (max-width: #{variables.$bp-md - 1px}) {
+      @content;
+    }
+  } @else if $breakpoint == lg {
+    @media (max-width: #{variables.$bp-lg - 1px}) {
+      @content;
+    }
+  } @else if $breakpoint == xl {
+    @media (max-width: #{variables.$bp-xl - 1px}) {
+      @content;
+    }
+  } @else if $breakpoint == xxl {
+    @media (max-width: #{variables.$bp-xxl - 1px}) {
+      @content;
+    }
+  } @else if $breakpoint == xxxl {
+    @media (max-width: #{variables.$bp-xxxl - 1px}) {
+      @content;
+    }
+  }
+}

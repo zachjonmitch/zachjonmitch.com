@@ -1,0 +1,17 @@
+@keyframes scrollUp {
+  0% {
+    transform: translate3d(0);
+  }
+  100% {
+    transform: translate3d(0, -50%, 0);
+  }
+}
+
+@keyframes rotate {
+  0% {
+      rotate: 0deg;
+  }
+  100% {
+      rotate: 360deg;
+  }
+}

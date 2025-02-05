@@ -1,0 +1,4 @@
+@function toRem($value) {
+  $remValue: ($value / 18) * 1rem; 
+  @return $remValue;
+}
