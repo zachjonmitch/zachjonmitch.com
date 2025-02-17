@@ -22,29 +22,36 @@
 }
 
 @font-face {
-  font-family: 'Pixelify';
-  src: url('https://zachjonmitch.com/dist/fonts/PixelifySans-Regular.ttf') format('truetype');
+  font-family: 'PixelSpace';
+  src: url('https://zachjonmitch.com/dist/fonts/PixelSpace-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Pixelify';
-  src: url('https://zachjonmitch.com/dist/fonts/PixelifySans-Medium.ttf') format('truetype');
+  src: url('https://zachjonmitch.com/dist/fonts/PixelifySans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pixelify';
+  src: url('https://zachjonmitch.com/dist/fonts/PixelifySans-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Pixelify';
-  src: url('https://zachjonmitch.com/dist/fonts/PixelifySans-SemiBold.ttf') format('truetype');
+  src: url('https://zachjonmitch.com/dist/fonts/PixelifySans-SemiBold.woff2') format('woff2');
   font-weight: 600;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Pixelify';
-  src: url('https://zachjonmitch.com/dist/fonts/PixelifySans-Bold.ttf') format('truetype');
+  src: url('https://zachjonmitch.com/dist/fonts/PixelifySans-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
 }
