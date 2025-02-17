@@ -2,56 +2,50 @@
 
 @font-face {
   font-family: 'PraterSans';
-  src: url('/dist/fonts/PraterSans-Bold.ttf') format('truetype'),
-       url('/dist/fonts/PraterSans-Bold.woff2') format('woff2'),
-       url('/dist/fonts/PraterSans-Bold.woff') format('woff'),
-       url('/dist/fonts/PraterSans-Bold.otf') format('opentype');
+  src: url('https://zachjonmitch.com/dist/fonts/PraterSans-Bold.woff2') format('woff2');
   font-weight: bold;
   font-style: normal;
-  font-display: swap;
+  // font-display: swap;
 }
 
 @font-face {
   font-family: 'PraterSans';
-  src: url('/dist/fonts/PraterSans-Regular.ttf') format('truetype'),
-       url('/dist/fonts/PraterSans-Regular.woff2') format('woff2'),
-       url('/dist/fonts/PraterSans-Regular.woff') format('woff'),
-       url('/dist/fonts/PraterSans-Regular.otf') format('opentype');
+  src: url('https://zachjonmitch.com/dist/fonts/PraterSans-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
-  font-display: swap;
+  // font-display: swap;
 }
 
 @font-face {
   font-family: 'Pixelify';
-  src: url('/dist/fonts/PixelifySans-Regular.ttf') format('truetype');
+  src: url('https://zachjonmitch.com/dist/fonts/PixelifySans-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  // font-display: swap;
 }
 
 @font-face {
   font-family: 'Pixelify';
-  src: url('/dist/fonts/PixelifySans-Medium.ttf') format('truetype');
+  src: url('https://zachjonmitch.com/dist/fonts/PixelifySans-Medium.ttf') format('truetype');
   font-weight: 500;
   font-style: normal;
-  font-display: swap;
+  // font-display: swap;
 }
 
 @font-face {
   font-family: 'Pixelify';
-  src: url('/dist/fonts/PixelifySans-SemiBold.ttf') format('truetype');
+  src: url('https://zachjonmitch.com/dist/fonts/PixelifySans-SemiBold.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
-  font-display: swap;
+  // font-display: swap;
 }
 
 @font-face {
   font-family: 'Pixelify';
-  src: url('/dist/fonts/PixelifySans-Bold.ttf') format('truetype');
+  src: url('https://zachjonmitch.com/dist/fonts/PixelifySans-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
-  font-display: swap;
+  // font-display: swap;
 }
 
 h1,
@@ -60,9 +54,9 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Prater Sans', Arial;
+  font-family: variables.$font-primary;
   font-weight: 700;
-  cursor: variables.$cursor-inverse-text;
+  cursor: variables.$cursor-text;
 }
 
 h1, .h1 {

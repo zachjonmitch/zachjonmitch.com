@@ -1,0 +1,67 @@
+@use 'mixins';
+
+.d-none {
+  display: none !important;
+}
+
+.d-sm-none {
+  @include mixins.min-width(sm) {
+    display: none !important;
+  }
+}
+
+.d-md-none {
+  @include mixins.min-width(md) {
+    display: none !important;
+  }
+}
+
+.d-lg-none {
+  @include mixins.min-width(lg) {
+    display: none !important;
+  }
+}
+
+.d-block {
+  display: block !important;
+}
+
+.d-sm-block {
+  @include mixins.min-width(sm) {
+    display: block !important;
+  }
+}
+
+.d-md-block {
+  @include mixins.min-width(md) {
+    display: block !important;
+  }
+}
+
+.d-lg-block {
+  @include mixins.min-width(lg) {
+    display: block !important;
+  }
+}
+
+.d-flex {
+  display: flex !important;
+}
+
+.d-sm-flex {
+  @include mixins.min-width(sm) {
+    display: flex !important;
+  }
+}
+
+.d-md-flex {
+  @include mixins.min-width(md) {
+    display: flex !important;
+  }
+}
+
+.d-lg-flex {
+  @include mixins.min-width(lg) {
+    display: flex !important;
+  }
+}

@@ -5,53 +5,89 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Zach Mitchell - Frontend Engineer</title>
   <link rel="icon" type="image/png" sizes="32x32" href="/dist/img/zm-favicon.ico">
+  <link rel="preload" href="https://zachjonmitch.com/dist/fonts/PraterSans-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://zachjonmitch.com/dist/fonts/PraterSans-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
   <link rel="stylesheet" href="/dist/css/styles.min.css">
 </head>
 <body>
-  <header class="nav-header">
+  <canvas class="canvas-bg" data-canvas-bg></canvas>
+  <header class="page-header">
     <nav class="zm-navbar">
       <div class="zm-navbar__grid">
         <div class="zm-navbar__brand">
-          <a class="zm-navbar__link" href="#info">
-            <svg class="zm-navbar__logo" width="36" height="28" viewBox="0 0 36 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <a class="zm-navbar__brand-link" href="#info">
+            <img class="zm-navbar__brand-headshot d-block" src="dist/img/headshot-zm.png" width="40">
+            <!--<svg class="zm-navbar__logo" width="36" height="28" viewBox="0 0 36 28" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M22.0953 0.0685705C21.139 -0.199342 20.1433 0.34195 19.8676 1.27144L12.6671 25.7663C12.3914 26.6958 12.9484 27.6635 13.9047 27.9314C14.861 28.1993 15.8567 27.6581 16.1324 26.7286L23.3329 2.23374C23.6086 1.30425 23.0516 0.336483 22.0953 0.0685705ZM26.6294 6.63515C25.9262 7.3186 25.9262 8.42852 26.6294 9.11197L31.6529 14L26.6238 18.888C25.9206 19.5715 25.9206 20.6814 26.6238 21.3649C27.327 22.0483 28.4689 22.0483 29.1721 21.3649L35.4726 15.2411C36.1758 14.5577 36.1758 13.4478 35.4726 12.7643L29.1721 6.64062C28.4689 5.95717 27.327 5.95717 26.6238 6.64062L26.6294 6.63515ZM9.3762 6.63515C8.67302 5.9517 7.53106 5.9517 6.82788 6.63515L0.527385 12.7589C-0.175795 13.4423 -0.175795 14.5522 0.527385 15.2357L6.82788 21.3594C7.53106 22.0428 8.67302 22.0428 9.3762 21.3594C10.0794 20.6759 10.0794 19.566 9.3762 18.8826L4.34706 14L9.3762 9.11197C10.0794 8.42852 10.0794 7.3186 9.3762 6.63515Z" fill="#05F802"/>
-            </svg>
+            </svg>-->
           </a>
         </div>
         <div class="zm-navbar__collapse" data-navbar-collapse>
           <div class="zm-navbar__primary-menu">
             <ul class="zm-navbar__list">
               <li class="zm-navbar__item">
-                <a class="zm-navbar__link text-lower" href="#info">Info</a>
+                <a class="zm-navbar__link" href="#info">Info</a>
               </li>
               <li class="zm-navbar__item">
-                <a class="zm-navbar__link text-lower" href="#work">Work & Tools</a>
+                <a class="zm-navbar__link" href="#work">Work & Tools</a>
               </li>
             </ul>
           </div>
           <div class="zm-navbar__secondary-menu">
-            <a class="zm-navbar__button d-none d-sm-flex" href="mailto:zachjonmitch@gmail.com">Say Hello <svg class="zm-navbar__button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#000000" d="M64 112c-8.8 0-16 7.2-16 16l0 22.1L220.5 291.7c20.7 17 50.4 17 71.1 0L464 150.1l0-22.1c0-8.8-7.2-16-16-16L64 112zM48 212.2L48 384c0 8.8 7.2 16 16 16l384 0c8.8 0 16-7.2 16-16l0-171.8L322 328.8c-38.4 31.5-93.7 31.5-132 0L48 212.2zM0 128C0 92.7 28.7 64 64 64l384 0c35.3 0 64 28.7 64 64l0 256c0 35.3-28.7 64-64 64L64 448c-35.3 0-64-28.7-64-64L0 128z"/></svg></a>
+            <div class="zm-socials">
+              <ul class="zm-socials__list list-reset">
+                <li class="zm-socials__item">
+                  <a class="zm-socials__button zm-button-circle zm-button-circle--green zm-button-circle--3d" href="https://www.linkedin.com/in/zachjonmitch/">
+                    <svg class="zm-socials__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                      <path fill="#ffffff" d="M100.3 448H7.4V148.9h92.9zM53.8 108.1C24.1 108.1 0 83.5 0 53.8a53.8 53.8 0 0 1 107.6 0c0 29.7-24.1 54.3-53.8 54.3zM447.9 448h-92.7V302.4c0-34.7-.7-79.2-48.3-79.2-48.3 0-55.7 37.7-55.7 76.7V448h-92.8V148.9h89.1v40.8h1.3c12.4-23.5 42.7-48.3 87.9-48.3 94 0 111.3 61.9 111.3 142.3V448z"/>
+                    </svg>
+                  </a>
+                </li>
+                <li class="zm-socials__item">
+                  <a class="zm-socials__button zm-button-circle zm-button-circle--green zm-button-circle--3d" href="https://github.com/zachjonmitch">
+                    <svg class="zm-socials__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
+                      <path fill="#ffffff" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3 .3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5 .3-6.2 2.3zm44.2-1.7c-2.9 .7-4.9 2.6-4.6 4.9 .3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8z"/>
+                    </svg>
+                  </a>
+                </li>
+                <li class="zm-socials__item">
+                  <a class="zm-socials__button zm-button-circle zm-button-circle--green zm-button-circle--3d" href="tel:1-801-234-0945">
+                    <svg class="zm-socials__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                      <path fill="#ffffff" d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z"/>
+                    </svg>
+                  </a>
+                </li>
+                <!-- <li class="zm-socials__item">
+                  <a class="zm-socials__button zm-button-circle zm-button-circle--green zm-button-circle--3d" href="mailto:zachjonmitch@gmail.com">
+                    <svg class="zm-socials__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                      <path fill="#ffffff" d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48L48 64zM0 176L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-208L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/>
+                    </svg>
+                  </a>
+                </li> -->
+              </ul>                       
+            </div>
+            <a class="zm-navbar__button d-none d-sm-flex" href="mailto:zachjonmitch@gmail.com" data-text-scramble>Say Hello <!--<img class="zm-navbar__button-headshot" src="dist/img/headshot-zm.png" width="20">--><svg class="zm-navbar__button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="#ffffff" d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48L48 64zM0 176L0 384c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-208L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg></a>
           </div>
         </div>
-        <button class="zm-navbar__toggle d-sm-none" data-navbar-toggle>
+        <button class="zm-navbar__toggle d-sm-none">
           <svg class="zm-navbar__toggle-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M464 256H48a48 48 0 0 0 0 96h416a48 48 0 0 0 0-96zm16 128H32a16 16 0 0 0 -16 16v16a64 64 0 0 0 64 64h352a64 64 0 0 0 64-64v-16a16 16 0 0 0 -16-16zM58.6 224h394.7c34.6 0 54.6-43.9 34.8-75.9C448 83.2 359.6 32.1 256 32c-103.5 .1-192 51.2-232.2 116.1C4 180.1 24.1 224 58.6 224zM384 112a16 16 0 1 1 -16 16 16 16 0 0 1 16-16zM256 80a16 16 0 1 1 -16 16 16 16 0 0 1 16-16zm-128 32a16 16 0 1 1 -16 16 16 16 0 0 1 16-16z"/></svg>
         </button>
       </div>
     </nav>
   </header>
-  <main>
+  <main class="page-content">
     <section class="hero" id="info">
       <div class="hero__container">
         <div class="hero__card">
           <div class="hero__card-inner">
             <div class="hero__headshot-wrap">
               <div class="hero__headshot-bg"></div>
-              <img class="hero__headshot" src="/dist/img/headshot-zm.png" alt="Zach Mitchell Headshot">
+              <img class="hero__headshot" src="/dist/img/headshot-zm.png" alt="Zach Mitchell Headshot" width="120" height="120">
             </div>
-            <div class="hero__content">
-              <h1 class="hero__name h2 mt-3 mb-2">Zach Mitchell</h1>
-              <p class="hero__job-title text-lower text-green">Frontend Engineer</p>
-            </div>
+            <header class="hero__header">
+              <h1 class="hero__name h2 mt-3 mb-3">Zachary <br>Mitchell</h1>
+              <p class="hero__job-title">&lt;FrontendEngineer/&gt;</p>
+            </header>
             <div class="hero__divider"></div>
             <div class="hero__socials">
               <ul class="hero__social-list list-reset">
@@ -84,71 +120,111 @@
     <section class="work py-4" id="work" data-work-section>
       <div class="zm-container">
         <div class="work__grid">
-          <div class="work-box" data-work-box>
-            <div class="work-box__track" data-work-box-track data-speed="70">
-              <img class="work-box__image" src="/dist/img/screenshot-g2-sell.jpg" alt="G2 Sell">
-              <img class="work-box__image" src="/dist/img/screenshot-g2-sell.jpg" alt="G2 Sell">
+          <div class="work__row">
+            <div class="work-box">
+              <div class="zm-toolbar">
+                <div class="zm-toolbar__dots">
+                  <div class="zm-toolbar__dot"></div>
+                  <div class="zm-toolbar__dot"></div>
+                  <div class="zm-toolbar__dot zm-toolbar__dot--green"></div>
+                </div>
+                <span class="zm-toolbar__text">https://sell.g2.com/</span>
+              </div>
+              <div class="work-box__carousel" data-work-box-carousel>
+                <div class="work-box__track" data-work-box-track data-speed="70">
+                  <img class="work-box__image" src="/dist/img/screenshot-g2-sell.jpg" alt="G2 Sell">
+                  <img class="work-box__image" src="/dist/img/screenshot-g2-sell.jpg" alt="G2 Sell">
+                </div>
+              </div>
+              <div class="work-info">
+                <div class="work-info__content">
+                  <h4 class="work-info__title">G2 Marketing Solutions</h4>
+                  <ul class="work-info__list">
+                    <li class="work-info__item">HUBL</li>
+                    <li class="work-info__item">JavaScript</li>
+                    <li class="work-info__item">Marketo</li>
+                  </ul>
+                </div>
+              </div>
             </div>
-            <div class="work-info" data-work-info>
-              <div class="work-info__content">
-                <div class="work-info__icon"></div>
-                <h4 class="work-info__title">G2 Marketing Solutions</h4>
-                <ul class="work-info__list">
-                  <li class="work-info__item">HUBL</li>
-                  <li class="work-info__item">JavaScript</li>
-                  <li class="work-info__item">Marketo</li>
-                </ul>
+            <div class="work-box">
+              <div class="zm-toolbar">
+                <div class="zm-toolbar__dots">
+                  <div class="zm-toolbar__dot"></div>
+                  <div class="zm-toolbar__dot"></div>
+                  <div class="zm-toolbar__dot zm-toolbar__dot--green"></div>
+                </div>
+                <span class="zm-toolbar__text">https://www.rmrbullets.com/</span>
+              </div>
+              <div class="work-box__carousel" data-work-box-carousel>
+                <div class="work-box__track" data-work-box-track data-speed="46">
+                  <img class="work-box__image" src="/dist/img/screenshot-rmr.jpg" alt="RMR Bullets">
+                  <img class="work-box__image" src="/dist/img/screenshot-rmr.jpg" alt="RMR Bullets">
+                </div>
+              </div>
+              <div class="work-info">
+                <div class="work-info__content">
+                  <h4 class="work-info__title">RMR Bullets</h4>
+                  <ul class="work-info__list">
+                    <li class="work-info__item">PHP</li>
+                    <li class="work-info__item">JavaScript</li>
+                    <li class="work-info__item">MySQL</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
-          <div class="work-box" data-work-box>
-            <div class="work-box__track" data-work-box-track data-speed="70">
-              <img class="work-box__image" src="/dist/img/screenshot-g2-reach.jpg" alt="G2 Reach">
-              <img class="work-box__image" src="/dist/img/screenshot-g2-reach.jpg" alt="G2 Reach">
-            </div>
-            <div class="work-info" data-work-info>
-              <div class="work-info__content">
-                <div class="work-info__icon"></div>
-                <h4 class="work-info__title">G2 Reach <br>Global Event</h4>
-                <ul class="work-info__list">
-                  <li class="work-info__item">HUBL</li>
-                  <li class="work-info__item">JavaScript</li>
-                  <li class="work-info__item">Marketo</li>
-                </ul>
+          <div class="work__row">
+            <div class="work-box">
+              <div class="zm-toolbar">
+                <div class="zm-toolbar__dots">
+                  <div class="zm-toolbar__dot"></div>
+                  <div class="zm-toolbar__dot"></div>
+                  <div class="zm-toolbar__dot zm-toolbar__dot--green"></div>
+                </div>
+                <span class="zm-toolbar__text">https://rrfedu.com/weekly-report/</span>
+              </div>
+              <div class="work-box__carousel" data-work-box-carousel>
+                <div class="work-box__track" data-work-box-track data-speed="105">
+                  <img class="work-box__image" src="/dist/img/screenshot-rrfc.jpg" alt="RRFC">
+                  <img class="work-box__image" src="/dist/img/screenshot-rrfc.jpg" alt="RRFC">
+                </div>
+              </div>
+              <div class="work-info">
+                <div class="work-info__content">
+                  <h4 class="work-info__title">RRFC</h4>
+                  <ul class="work-info__list">
+                    <li class="work-info__item">PHP</li>
+                    <li class="work-info__item">JavaScript</li>
+                    <li class="work-info__item">MySQL</li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="work-box" data-work-box>
-            <div class="work-box__track" data-work-box-track data-speed="46">
-              <img class="work-box__image" src="/dist/img/screenshot-rmr.jpg" alt="RMR Bullets">
-              <img class="work-box__image" src="/dist/img/screenshot-rmr.jpg" alt="RMR Bullets">
-            </div>
-            <div class="work-info" data-work-info>
-              <div class="work-info__content">
-                <div class="work-info__icon"></div>
-                <h4 class="work-info__title">Rocky Mountain Reloading</h4>
-                <ul class="work-info__list">
-                  <li class="work-info__item">PHP</li>
-                  <li class="work-info__item">JavaScript</li>
-                  <li class="work-info__item">MySQL</li>
-                </ul>
+            <div class="work-box">
+              <div class="zm-toolbar">
+                <div class="zm-toolbar__dots">
+                  <div class="zm-toolbar__dot"></div>
+                  <div class="zm-toolbar__dot"></div>
+                  <div class="zm-toolbar__dot zm-toolbar__dot--green"></div>
+                </div>
+                <span class="zm-toolbar__text">https://reach.g2.com/</span>
               </div>
-            </div>
-          </div>
-          <div class="work-box" data-work-box>
-            <div class="work-box__track" data-work-box-track data-speed="105">
-              <img class="work-box__image" src="/dist/img/screenshot-rrfc.jpg" alt="RRFC">
-              <img class="work-box__image" src="/dist/img/screenshot-rrfc.jpg" alt="RRFC">
-            </div>
-            <div class="work-info" data-work-info>
-              <div class="work-info__content">
-                <div class="work-info__icon"></div>
-                <h4 class="work-info__title">Recording Radio Film Connection</h4>
-                <ul class="work-info__list">
-                  <li class="work-info__item">PHP</li>
-                  <li class="work-info__item">JavaScript</li>
-                  <li class="work-info__item">MySQL</li>
-                </ul>
+              <div class="work-box__carousel" data-work-box-carousel>
+                <div class="work-box__track" data-work-box-track data-speed="70">
+                  <img class="work-box__image" src="/dist/img/screenshot-g2-reach.jpg" alt="G2 Reach">
+                  <img class="work-box__image" src="/dist/img/screenshot-g2-reach.jpg" alt="G2 Reach">
+                </div>
+              </div>
+              <div class="work-info">
+                <div class="work-info__content">
+                  <h4 class="work-info__title">G2 Reach Global Event</h4>
+                  <ul class="work-info__list">
+                    <li class="work-info__item">HUBL</li>
+                    <li class="work-info__item">JavaScript</li>
+                    <li class="work-info__item">Marketo</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
