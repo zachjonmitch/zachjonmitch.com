@@ -1,0 +1,419 @@
+@use 'variables';
+@use 'mixins';
+@use 'functions';
+@use 'animations';
+
+.zm-container {
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
+
+  @include mixins.min-width(sm) {
+    max-width: 30rem;
+  }
+
+  @include mixins.min-width(md) {
+    max-width: 40rem;
+  }
+
+  @include mixins.min-width(lg) {
+    max-width: 85rem;
+  }
+}
+
+.zm-container--expand {
+  width: 100%;
+}
+
+.zm-button-circle {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: #342A86;
+  transition: .2s ease-in-out;
+}
+
+.zm-button-circle--black {
+  border: 3px solid black;
+}
+
+.zm-button-circle--white {
+  border: 3px solid white;
+}
+
+.zm-button-circle--3d {
+  box-shadow: 3px 3px black;
+}
+
+.zm-button-circle--3d:hover {
+  box-shadow: 1px 1px black;
+  transform: translate(3px, 3px);
+}
+
+.zm-button-circle--black.zm-button-circle--3d::before {
+  background-color: black;
+}
+
+.zm-button-circle--white.zm-button-circle--3d::before {
+  background-color: white;
+}
+
+.zm-button-circle--green {
+  background-color: black;
+  border: 2px solid variables.$color-green;
+}
+
+.zm-button-circle--green path {
+  fill: variables.$color-green;
+}
+
+.zm-button-circle--green.zm-button-circle--3d {
+  box-shadow: 2px 2px variables.$color-green;
+}
+
+// .zm-button-circle--green .zm-button-circle--3d:hover {
+//   box-shadow: 1px 1px variables.$color-green;
+//   transform: translate(2px, 2px);
+// }
+
+.zm-button-circle--green.zm-button-circle--3d::before {
+  background-color: variables.$color-green;
+}
+
+.zm-button-circle--green.zm-button-circle--3d:hover,
+.zm-button-circle--green.zm-button-circle--3d:focus {
+  box-shadow: 1px 1px variables.$color-green;
+  transform: translate(2px, 2px);
+}
+
+.zm-navbar {
+  height: 55px;
+  position: relative;
+
+  @include mixins.max-width(lg) {
+    height: 60px;
+  }
+}
+
+.zm-navbar__grid,
+.zm-navbar__collapse,
+.zm-navbar__list,
+.zm-navbar__item {
+  height: 100%;
+}
+
+.zm-navbar__grid {
+  max-width: 85rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+}
+
+.zm-navbar__logo {
+  display: block;
+  width: 30px;
+}
+
+.zm-navbar__collapse {
+  display: flex;
+  flex-basis: 100%;
+
+  @include mixins.max-width(lg) {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    left: 0;
+    top: 0;
+    display: none;
+    background-color: black;
+    flex-direction: column;
+
+    &--active {
+      display: flex;
+      transform: translateX(0);
+
+      .zm-navbar__primary-menu {
+        margin-left: 0;
+      }
+
+      .zm-navbar__list {
+        flex-direction: column;
+        gap: 10px;
+        padding-left: 15px;
+        margin-top: 120px;
+      }
+
+      .zm-navbar__item {
+        height: auto;
+      }
+
+      .zm-navbar__link {
+        // font-family: variables.$font-primary;
+        font-size: 45px;
+        font-weight: 400;
+        text-transform: uppercase;
+      }
+    }
+  }
+}
+
+.zm-navbar__close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid variables.$color-green;
+  border-radius: 50%;
+  z-index: 999;
+}
+
+.zm-navbar__close-icon {
+  color: variables.$color-green;
+  width: 25px;
+  height: 25px;
+}
+
+.zm-navbar__primary-menu {
+  margin-left: 40px;
+}
+
+.zm-navbar__secondary-menu {
+  margin-left: auto;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+
+.zm-navbar__list {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  gap: 40px;
+}
+
+.zm-navbar__link {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  height: 100%;
+  position: relative;
+  color: variables.$color-green;
+}
+
+.zm-navbar__link:hover::before {
+  content: "";
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 20px);
+  height: 6px;
+  background-image: url('data:image/svg+xml;charset=utf8,%3Csvg id=%27squiggle-link%27 xmlns=%27http://www.w3.org/2000/svg%27 xmlns:xlink=%27http://www.w3.org/1999/xlink%27 xmlns:ev=%27http://www.w3.org/2001/xml-events%27 viewBox=%270 0 10 18%27%3E%3Cstyle type=%27text/css%27%3E.squiggle{animation:shift .5s linear infinite;}@keyframes shift {from {transform:translateX%28-10px%29;}to {transform:translateX%280%29;}}%3C/style%3E%3Cpath fill=%27none%27 stroke=%27%2305f802%27 stroke-width=%27.8%27 class=%27squiggle%27 d=%27M0,17.5 c 2.5,0,2.5,-1.5,5,-1.5 s 2.5,1.5,5,1.5 c 2.5,0,2.5,-1.5,5,-1.5 s 2.5,1.5,5,1.5%27 /%3E%3C/svg%3E');
+  background-position: 0 100%;
+  background-size: auto 36px;
+  background-repeat: repeat;
+}
+
+.zm-navbar__secondary-menu {
+  position: relative;
+}
+
+.zm-navbar__button {
+  white-space: nowrap;
+  width: 160px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  color: variables.$color-off-white;
+  border: 2px solid variables.$color-off-white;
+  border-radius: 10px 10px 0;
+  font-family: variables.$font-primary;
+  font-weight: bold;
+  transition: .2s ease-in-out;
+  text-transform: uppercase;
+  font-size: 16px;
+  background: variables.$gradient-metal-dark;
+  color: black;
+  border: 0;
+  box-shadow: inset 0px 0px 5px #3e3e3e;
+  border-radius: 100px;
+  position: relative;
+  padding-right: 33px;
+  margin-top: 4px;
+}
+
+.zm-navbar__button-icon {
+  width: 19px;
+  display: block;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 25px;
+}
+
+.zm-navbar__button-icon path {
+  fill: black;
+  transition: .2s ease-in-out;
+}
+
+.zm-navbar__button:hover {
+  box-shadow: inset 1px 1px 7px #000000;
+}
+
+.zm-navbar__brand-headshot {
+  animation: rotate 10s linear infinite;
+}
+
+.zm-navbar__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: variables.$gradient-metal-dark;
+  width: 45px;
+  height: 45px;
+  margin-left: auto;
+  margin-right: -7px;
+  border: 0;
+  box-shadow: inset 0px 0px 5px #3e3e3e;
+}
+
+.zm-navbar__toggle-icon {
+  width: 20px;
+  display: block;
+}
+
+.zm-navbar__toggle-icon path {
+  fill: black;
+}
+
+.zm-toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 22px;
+  background: variables.$gradient-metal-dark;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #d3d3d3;
+  z-index: 3;
+  border-radius: 10px 10px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px;
+}
+
+.zm-toolbar__dots {
+  display: flex;
+  gap: 4px;
+}
+
+.zm-toolbar__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #e5e7eb;
+}
+
+.zm-toolbar__dot--green {
+  background: rgb(164, 255, 126);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 1px 3px 1px inset, rgb(72, 202, 16) 0px -3px 2px 4px inset, rgba(255, 255, 255, 0.7) 0px -5px 5px inset;
+}
+
+.zm-toolbar__text {
+  display: flex;
+  justify-content: center;
+  color: black;
+  font-size: .75rem;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-weight: 600;
+}
+
+.zm-socials__list {
+  list-style-type: none;
+  display: flex;
+  gap: 22px;
+  justify-content: center;
+}
+
+.zm-socials__button {
+  width: 37px;
+  height: 37px;
+  margin-top: 2px;
+}
+
+.zm-socials__icon {
+  width: 14px;
+  display: block;
+  position: relative;
+  color: variables.$color-green;
+}
+
+.zm-reveal-char-wrap {
+  display: inline-block;
+  overflow: hidden;
+  position: relative;
+  cursor: variables.$cursor-inverse-default;
+  // pointer-events: auto;
+}
+
+.zm-reveal-char {
+  display: inline-block;
+  transform: translateY(100%);
+  transition: .3s cubic-bezier(.68,-.55,.265,1.55);
+}
+
+.zm-reveal-char--active {
+  transform: translateY(0);
+}
+
+.zm-reveal-char-alt {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translateY(100%);
+  transition: .35s cubic-bezier(.68,-.55,.265,1.55);
+}
+
+.zm-reveal-char-wrap:hover .zm-reveal-char {
+  transform: translateY(-100%);
+}
+
+.zm-reveal-char-wrap:hover .zm-reveal-char-alt {
+  transform: translateY(0);
+  transition: .4s cubic-bezier(.68,-.55,.265,1.55);
+}
+
+.zm-reveal-char,
+.zm-reveal-char-alt {
+  line-height: 1;
+}
+
+[data-text-typewriter] {
+  height: 1.2em;
+  visibility: hidden;
+}
+
+.zm-typewriter {
+  visibility: visible;   /* Makes text visible when the effect starts */
+}

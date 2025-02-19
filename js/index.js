@@ -1,23 +1,54 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const mouse = { x: 0, y: 0 };
-
-  // initTextScramble();
   initSiteBackground();
-  // initMobileMenu();
+  initTextReveal();
+  initTextTypewriter();
+  initMobileMenu();
   initAnchorScroll();
   initWorkCarousels();
-  // initTextShift();
   initTextScramble();
-  // initWorkInfo(mouse);
   // initCardTilt();
   // initCardCursor();
 
-  document.addEventListener('mousemove', handleMouseMoveUpdatePosition);
-
-  function handleMouseMoveUpdatePosition(e) {
-    ({ clientX: mouse.x, clientY: mouse.y } = e);
-  }
+  window.addEventListener('resize', handleResize);
+  initBreakpointListener();
 });
+
+function handleResize() {
+  resetMobileMenu();
+}
+
+function initBreakpointListener() {
+  const mediaQueries = {
+    mobile: window.matchMedia("(max-width: 575px)"),
+    tablet: window.matchMedia("(max-width: 991px)"),
+  };
+
+  let lastState = {
+    mobile: mediaQueries.mobile.matches,
+    tablet: mediaQueries.tablet.matches,
+  };
+
+  function handleBreakpointChange() {
+    const newState = {
+      mobile: mediaQueries.mobile.matches,
+      tablet: mediaQueries.tablet.matches,
+    };
+
+    if (newState.mobile !== lastState.mobile) {
+      lastState.mobile = newState.mobile;
+      initTextReveal();
+    }
+
+    if (newState.tablet !== lastState.tablet) {
+      lastState.tablet = newState.tablet;
+    }
+  }
+
+  mediaQueries.mobile.addEventListener("change", handleBreakpointChange);
+  mediaQueries.tablet.addEventListener("change", handleBreakpointChange);
+
+  handleBreakpointChange();
+}
 
 /**
  * 
@@ -135,21 +166,36 @@ function initSiteBackground() {
 /**
  * 
  */
-/*function initMobileMenu() {
+function initMobileMenu() {
+  const body = document.querySelector('body');
   const navbarToggle = document.querySelector('[data-navbar-toggle]');
   const navbarCollapse = document.querySelector('[data-navbar-collapse]');
+  const navbarCloseButton = document.querySelector('[data-navbar-close-button]');
 
-  window.addEventListener('resize', handleResize);
   navbarToggle.addEventListener('click', handleClickNavbarToggle);
-
-  function handleResize() {
-    navbarCollapse.classList.remove('zm-navbar__collapse--active');
-  }
+  navbarCloseButton.addEventListener('click', (handleClickNavbarCloseButton));
 
   function handleClickNavbarToggle() {
-    navbarCollapse.classList.toggle('zm-navbar__collapse--active');
+    body.classList.add('mobile-menu-open');
+    navbarCollapse.classList.add('zm-navbar__collapse--active');
   }
-}*/
+
+  function handleClickNavbarCloseButton() {
+    body.classList.remove('mobile-menu-open');
+    navbarCollapse.classList.remove('zm-navbar__collapse--active');
+  }
+}
+
+/**
+ * 
+ */
+function resetMobileMenu() {
+  const body = document.querySelector('body');
+  const navbarCollapse = document.querySelector('[data-navbar-collapse]');
+  
+  body.classList.remove('mobile-menu-open');
+  navbarCollapse.classList.remove('zm-navbar__collapse--active');
+}
 
 /**
  * 
@@ -201,90 +247,126 @@ function initWorkCarousels() {
 /**
  * 
  */
-/*function initTextShift() {
-  const textShifts = document.querySelectorAll('[data-text-shift]'); // Select all elements
+function initTextReveal() {
+  const elements = document.querySelectorAll('[data-text-reveal]');
 
-  textShifts.forEach((element) => { // Iterate over each element
-    const text = element.innerHTML.trim(); // Trim to remove extra spaces
-    const newContent = document.createDocumentFragment();
+  const isMobile = window.matchMedia("(max-width: 575px)").matches;
 
-    text.split('').forEach(char => {
-      const charWrapper = document.createElement('div');
-      charWrapper.classList.add('char');
-      charWrapper.style.display = 'inline-block';
-      charWrapper.style.position = 'relative';
-      charWrapper.style.overflow = 'hidden';
+  elements.forEach((element) => {
+    let text = element.getAttribute(isMobile ? 'data-text-reveal-mobile' : 'data-text-reveal')?.trim();
 
-      const originalChar = document.createElement('div');
-      originalChar.textContent = char;
-      originalChar.classList.add('char-original');
-      originalChar.style.position = 'absolute';
-      originalChar.style.top = '0';
-      originalChar.style.left = '0';
-      originalChar.style.transition = 'transform 0.3s ease';
+    if (!text) {
+      element.innerHTML = '';
+      return;
+    }
 
-      const cloneChar = document.createElement('div');
-      cloneChar.textContent = char;
-      cloneChar.classList.add('char-clone');
-      cloneChar.style.position = 'absolute';
-      cloneChar.style.top = '100%';
-      cloneChar.style.left = '0';
-      cloneChar.style.transition = 'transform 0.3s ease';
-
-      charWrapper.appendChild(originalChar);
-      charWrapper.appendChild(cloneChar);
-
-      charWrapper.addEventListener('mouseenter', () => {
-        originalChar.style.transform = 'translateY(-100%)';
-        cloneChar.style.transform = 'translateY(-100%)';
-
-        setTimeout(() => {
-          originalChar.style.transform = 'translateY(0)';
-          cloneChar.style.transform = 'translateY(0)';
-        }, 300);
-      });
-
-      newContent.appendChild(charWrapper);
-    });
+    let chars = text.split('');
 
     element.innerHTML = '';
-    element.appendChild(newContent);
-  });
-}*/
+    chars.forEach((char) => {
+      const html = `<span class="zm-reveal-char-wrap">
+                      <span class="zm-reveal-char">${char}</span>
+                      <span class="zm-reveal-char-alt">${char}</span>
+                    </span>`;
+      element.insertAdjacentHTML('beforeend', html);
+    });
 
+    setTimeout(() => {
+      const charElements = element.querySelectorAll('.zm-reveal-char');
+      charElements.forEach((char, index) => {
+        setTimeout(() => {
+          char.classList.add('zm-reveal-char--active');
+        }, index * 70);
+      });
+    }, 800);
+  });
+}
+
+/**
+ * 
+ */
 function initTextScramble() {
   const textScrambles = document.querySelectorAll('[data-text-scramble]');
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
   textScrambles.forEach(element => {
-    let originalText = element.textContent.trim();
-    
+    let textNode = Array.from(element.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
+    if (!textNode) return;
+
+    let originalText = textNode.textContent.trim();
+
     element.addEventListener("mouseenter", () => {
       let iteration = 0;
       let interval = setInterval(() => {
-        element.childNodes.forEach(node => {
-          if (node.nodeType === Node.TEXT_NODE) {
-            node.textContent = originalText
-              .split("")
-              .map((letter, index) => {
-                if (index < iteration) {
-                  return originalText[index];
-                }
-                return letters[Math.floor(Math.random() * 26)];
-              })
-              .join("");
-          }
-        });
-        
+        textNode.textContent = originalText
+          .split("")
+          .map((letter, index) => {
+            if (index < iteration) {
+              return originalText[index];
+            }
+            return letters[Math.floor(Math.random() * 26)];
+          })
+          .join("");
+
         if (iteration >= originalText.length) {
           clearInterval(interval);
         }
-        
+
         iteration += 1 / 3;
       }, 30);
     });
   });
 }
+
+function initTextTypewriter() {
+  const elements = document.querySelectorAll("[data-text-typewriter]");
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const element = entry.target;
+        const text = element.getAttribute("data-text-typewriter");
+        let index = 0;
+
+        element.classList.add("zm-typewriter");
+
+        setTimeout(() => {
+          const interval = setInterval(() => {
+            element.textContent = text.slice(0, index);
+            index++;
+
+            if (index > text.length) {
+              clearInterval(interval);
+              observer.unobserve(element);
+            }
+          }, 60);
+        }, 1800);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  elements.forEach(element => observer.observe(element));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*function initCardCursor() {
   const workSection = document.querySelector('[data-work-section]');
