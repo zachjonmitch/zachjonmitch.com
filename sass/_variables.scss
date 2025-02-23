@@ -29,3 +29,5 @@ $color-off-white: #fffce1;
 
 $gradient-metal-light: linear-gradient(180deg, transparent, rgba(0, 0, 0, .3) 100%), url('/dist/img/bg-metal-light.webp');
 $gradient-metal-dark: linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.3) 100%), url('/dist/img/bg-metal-dark.webp') 50% / cover no-repeat, lightgrey;
+
+$transition-bounce-1: cubic-bezier(.68,-.55,.265,1.55);

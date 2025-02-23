@@ -1,61 +1,165 @@
+// import { initAsteroids } from "./asteroids.js";
+
 document.addEventListener('DOMContentLoaded', () => {
   initSiteBackground();
-  initTextReveal();
-  initTextTypewriter();
+  // initAsteroids();
   initMobileMenu();
   initAnchorScroll();
+  initTextReveals();
+  initTextTypewriters();
+  initTextScrambles();
   initWorkCarousels();
-  initTextScramble();
-  // initCardTilt();
-  // initCardCursor();
 
-  window.addEventListener('resize', handleResize);
-  initBreakpointListener();
+  window.addEventListener('resize', () => {
+    resetMobileMenu();
+  });
 });
 
-function handleResize() {
-  resetMobileMenu();
-}
-
-function initBreakpointListener() {
-  const mediaQueries = {
-    mobile: window.matchMedia("(max-width: 575px)"),
-    tablet: window.matchMedia("(max-width: 991px)"),
-  };
-
-  let lastState = {
-    mobile: mediaQueries.mobile.matches,
-    tablet: mediaQueries.tablet.matches,
-  };
-
-  function handleBreakpointChange() {
-    const newState = {
-      mobile: mediaQueries.mobile.matches,
-      tablet: mediaQueries.tablet.matches,
-    };
-
-    if (newState.mobile !== lastState.mobile) {
-      lastState.mobile = newState.mobile;
-      initTextReveal();
-    }
-
-    if (newState.tablet !== lastState.tablet) {
-      lastState.tablet = newState.tablet;
-    }
-  }
-
-  mediaQueries.mobile.addEventListener("change", handleBreakpointChange);
-  mediaQueries.tablet.addEventListener("change", handleBreakpointChange);
-
-  handleBreakpointChange();
-}
 
 /**
+ * Controls all elements with `data-pause` attributes.
  * 
+ * - Allows pausing/resuming of a specific element, by type, or all at once.
+ * 
+ * @returns {{
+ *   register: (element: HTMLElement, type: string, onPause: Function, onResume: Function),
+ *   pauseAll: Function,
+ *   resumeAll: Function,
+ *   pauseType: (type?: string),
+ *   resumeType: (type?: string),
+ *   resumeElement: (element: HTMLElement),
+ * }}
+ */
+function pauseController() {
+  if (!pauseController.instance) {
+    let elements = new WeakMap();
+    let trackedElements = new Set();
+
+    pauseController.instance = {
+      register: (element, type, onPause, onResume) => {
+        if (!elements.has(element)) {
+          elements.set(element, { type, pause: onPause, resume: onResume });
+          console.log('Registering element:', element, 'Type:', type);
+          trackedElements.add(element);
+
+          if (element.hasAttribute('data-pause')) {
+            onPause();
+          }
+        }
+      },
+      pauseAll: () => {
+        trackedElements.forEach(element => {
+          const entry = elements.get(element);
+          if (entry) entry.pause();
+        });
+      },
+      resumeAll: () => {
+        trackedElements.forEach(element => {
+          const entry = elements.get(element);
+          if (entry) entry.resume();
+        });
+      },
+      pauseType: (type = null) => {
+        trackedElements.forEach(element => {
+          const entry = elements.get(element);
+          if (entry && (!type || entry.type === type)) {
+            entry.pause();
+          }
+        });
+      },
+      resumeType: (type = null) => {
+        trackedElements.forEach(element => {
+          const entry = elements.get(element);
+          if (entry && (!type || entry.type === type)) {
+            entry.resume();
+          }
+        });
+      },
+      resumeElement: (element) => {
+        const entry = elements.get(element);
+        if (entry) entry.resume();
+      }
+    };
+  }
+
+  return pauseController.instance;
+}
+
+
+
+/**
+ * Allows for multiple timeouts to be tracked and cleared to avoid conflicts.
+ * 
+ * @returns {{
+ *   add: (id: number),
+ *   clearAll: Function
+ * }}
+ */
+function timeoutController() {
+  if (!timeoutController.instance) {
+    let timeouts = new Set();
+
+    timeoutController.instance = {
+      add: (id) => timeouts.add(id),
+      clearAll: () => {
+        timeouts.forEach(clearTimeout);
+        timeouts.clear();
+      }
+    };
+  }
+
+  return timeoutController.instance;
+}
+
+
+/**
+ * Observes elements with given selector using the Intersection Observer API.
+ * 
+ * @param {string} selector 
+ * @param {Function} onIntersect 
+ * @param {IntersectionObserverInit} options 
+ * @returns {IntersectionObserver}
+ */
+function observeElements(selector, onIntersect, options = { root: null, threshold: 0 }) {
+  const elements = document.querySelectorAll(selector);
+  const observer = new IntersectionObserver(entries => {
+    requestAnimationFrame(() => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          onIntersect(entry, observer);
+        }
+      });
+    });
+  }, options);
+
+  elements.forEach(element => observer.observe(element));
+  return observer;
+}
+
+
+/**
+ * Decodes HTML entities in a given string.
+ * 
+ * @param {string} html
+ * @returns {string}
+ */
+function decodeHTML(html) {
+  var txt = document.createElement("textarea");
+  txt.innerHTML = html;
+  return txt.value;
+}
+
+
+/**
+ * Initializes the floating, draggable, canvas background.
  */
 function initSiteBackground() {
+  const SPEED = 0.5;
+  const PATTERN_WIDTH = 269;
+  const FRICTION = 0.95;
+
   const body = document.querySelector('body');
-  const canvas = document.querySelector('[data-canvas-bg]');
+  const canvas = document.querySelector('[data-ui-canvas-bg]');
   const ctx = canvas.getContext('2d');
 
   let patternImage = new Image();
@@ -63,28 +167,25 @@ function initSiteBackground() {
 
   let offsetX = 0;
   let offsetY = 0;
-  let speed = 0.5;
-  let patternWidth = 269;
   let patternHeight;
 
   let isDragging = false;
   let lastMouseX = 0;
   let lastMouseY = 0;
 
-  let velocityX = -speed;
+  let velocityX = -SPEED;
   let velocityY = 0;
-  const friction = 0.95;
 
   function resizeCanvas() {
     const pixelRatio = window.devicePixelRatio || 1;
-
+  
     canvas.width = window.innerWidth * pixelRatio;
     canvas.height = window.innerHeight * pixelRatio;
-    canvas.style.width = `${window.innerWidth}px`;
-    canvas.style.height = `${window.innerHeight}px`;
-
+    canvas.style.width = '100vw';
+    canvas.style.height = '100vh';
+  
     ctx.scale(pixelRatio, pixelRatio);
-
+  
     patternHeight = window.innerHeight * 0.3;
     ctx.imageSmoothingEnabled = false;
   }
@@ -97,9 +198,9 @@ function initSiteBackground() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    for (let x = offsetX - patternWidth; x < window.innerWidth + patternWidth; x += patternWidth) {
+    for (let x = offsetX - PATTERN_WIDTH; x < window.innerWidth + PATTERN_WIDTH; x += PATTERN_WIDTH) {
       for (let y = offsetY - patternHeight; y < window.innerHeight + patternHeight; y += patternHeight) {
-        ctx.drawImage(patternImage, x, y, patternWidth, patternHeight);
+        ctx.drawImage(patternImage, x, y, PATTERN_WIDTH, patternHeight);
       }
     }
 
@@ -107,15 +208,15 @@ function initSiteBackground() {
       offsetX += velocityX;
       offsetY += velocityY;
 
-      velocityX *= friction;
-      velocityY *= friction;
+      velocityX *= FRICTION;
+      velocityY *= FRICTION;
 
-      if (Math.abs(velocityX) < speed) velocityX = -speed; 
+      if (Math.abs(velocityX) < SPEED) velocityX = -SPEED; 
       if (Math.abs(velocityY) < 0.01) velocityY = 0;
     }
 
-    if (offsetX <= -patternWidth) offsetX += patternWidth;
-    if (offsetX >= patternWidth) offsetX -= patternWidth;
+    if (offsetX <= -PATTERN_WIDTH) offsetX += PATTERN_WIDTH;
+    if (offsetX >= PATTERN_WIDTH) offsetX -= PATTERN_WIDTH;
     if (offsetY <= -patternHeight) offsetY += patternHeight;
     if (offsetY >= patternHeight) offsetY -= patternHeight;
 
@@ -163,14 +264,16 @@ function initSiteBackground() {
   window.addEventListener('resize', resizeCanvas);
 }
 
+
 /**
- * 
+ * Initializes the mobile menu functionality.
  */
 function initMobileMenu() {
   const body = document.querySelector('body');
-  const navbarToggle = document.querySelector('[data-navbar-toggle]');
-  const navbarCollapse = document.querySelector('[data-navbar-collapse]');
-  const navbarCloseButton = document.querySelector('[data-navbar-close-button]');
+  const navbarToggle = document.querySelector('[data-ui-navbar-toggle]');
+  const navbarCollapse = document.querySelector('[data-ui-navbar-collapse]');
+  const navbarCloseButton = document.querySelector('[data-ui-navbar-close-button]');
+  const pauseControl = pauseController();
 
   navbarToggle.addEventListener('click', handleClickNavbarToggle);
   navbarCloseButton.addEventListener('click', (handleClickNavbarCloseButton));
@@ -178,30 +281,32 @@ function initMobileMenu() {
   function handleClickNavbarToggle() {
     body.classList.add('mobile-menu-open');
     navbarCollapse.classList.add('zm-navbar__collapse--active');
+    pauseControl.resumeType('text-reveal');
   }
 
   function handleClickNavbarCloseButton() {
-    body.classList.remove('mobile-menu-open');
-    navbarCollapse.classList.remove('zm-navbar__collapse--active');
+    resetMobileMenu();
   }
 }
 
+
 /**
- * 
+ * Resets the mobile menu state.
  */
 function resetMobileMenu() {
   const body = document.querySelector('body');
-  const navbarCollapse = document.querySelector('[data-navbar-collapse]');
+  const navbarCollapse = document.querySelector('[data-ui-navbar-collapse]');
   
   body.classList.remove('mobile-menu-open');
   navbarCollapse.classList.remove('zm-navbar__collapse--active');
 }
 
+
 /**
- * 
+ * Initializes smooth scrolling behavior for anchor links.
  */
 function initAnchorScroll() {
-  const anchors = document.querySelectorAll('a[href^="#"]');
+  const anchors = document.querySelectorAll("a[href^='#']");
 
   anchors.forEach((anchor) => {
     anchor.addEventListener('click', handleAnchorClick);
@@ -225,68 +330,303 @@ function initAnchorScroll() {
   }
 }
 
+
 /**
- * 
+ * Initializes infinite scrolling animations for work carousels.
  */
 function initWorkCarousels() {
-  const workBoxTracks = document.querySelectorAll('[data-work-box-track]');
-  const observerOptions = { root: null, threshold: 0 };
+  const tracks = document.querySelectorAll("[data-ui-work-box-track]");
+  const mobileMediaQuery = window.matchMedia("(max-width: 991px)");
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const speed = parseFloat(entry.target.dataset.speed) || 70;
-        entry.target.style.animation = `scrollUp ${speed}s linear infinite`;
+  function setupAnimations() {
+    tracks.forEach(track => {
+      const speed = track.dataset.trackSpeed ? parseFloat(track.dataset.trackSpeed) : 100;
+      let yOffset = 0;
+      let animationFrame = null;
+      let isAnimating = false;
+
+      function animate() {
+        if (!isAnimating) return;
+        yOffset -= speed / 5000;
+        if (yOffset <= -50) yOffset = 0;
+        track.style.transform = `translate3d(0, ${yOffset}%, 0)`;
+        animationFrame = requestAnimationFrame(animate);
       }
-    });
-  }, observerOptions);
 
-  workBoxTracks.forEach((track) => observer.observe(track));
+      function startAnimation() {
+        if (!isAnimating) {
+          isAnimating = true;
+          requestAnimationFrame(animate);
+        }
+      }
+
+      function stopAnimation() {
+        isAnimating = false;
+        if (animationFrame) {
+          cancelAnimationFrame(animationFrame);
+          animationFrame = null;
+        }
+      }
+
+      function updateAnimationState() {
+        if (mobileMediaQuery.matches) {
+          startAnimation();
+        } else {
+          stopAnimation();
+        }
+      }
+
+      updateAnimationState();
+      mobileMediaQuery.addEventListener("change", updateAnimationState);
+
+      track.closest(".work-box").addEventListener("mouseenter", () => {
+        if (!mobileMediaQuery.matches) {
+          tracks.forEach(otherTrack => {
+            if (otherTrack !== track) {
+              otherTrack.dataset.animating = "false";
+              stopAnimation.call(otherTrack);
+            }
+          });
+
+          track.dataset.animating = "true";
+          startAnimation();
+        }
+      });
+
+      track.closest(".work-box").addEventListener("mouseleave", () => {
+        if (!mobileMediaQuery.matches) {
+          stopAnimation();
+        }
+      });
+    });
+  }
+
+  setupAnimations();
 }
 
+
 /**
+ * Initializes all text reveal animations.
  * 
+ * - Splits the text into individual characters and wraps them in elements for animation.
+ * - Adds hover effect that swaps characters with an alt version.
  */
-function initTextReveal() {
-  const elements = document.querySelectorAll('[data-text-reveal]');
+function initTextReveals() {
+  const elements = document.querySelectorAll('[data-zm-text-reveal]');
+  const mediaQuery = window.matchMedia('(max-width: 575px)');
+  const pauseControl = pauseController();
 
-  const isMobile = window.matchMedia("(max-width: 575px)").matches;
+  function animateChar(char, delay, duration, startPosition, endPosition) {
+    const animation = char.animate(
+      [
+        { transform: `translateY(${startPosition}%)` },
+        { transform: `translateY(${endPosition}%)` }
+      ],
+      { 
+        duration: duration, 
+        easing: 'cubic-bezier(.68,-.55,.265,1.55)', 
+        fill: 'forwards', 
+        delay: delay 
+      }
+    );
+  
+    return animation.finished;
+  }
 
-  elements.forEach((element) => {
-    let text = element.getAttribute(isMobile ? 'data-text-reveal-mobile' : 'data-text-reveal')?.trim();
+  function insertChars(element) {
+    const isMobileOnly = element.getAttribute('data-zm-text-reveal-mode') === 'mobile';
+
+    if (!mediaQuery.matches && isMobileOnly) return;
+
+    console.log('iserting chars', element);
+
+    let text = '';
+  
+    if (element.hasAttribute('data-zm-text-reveal-mobile') && mediaQuery.matches) {
+      text = element.getAttribute('data-zm-text-reveal-mobile');
+    } else {
+      text = element.getAttribute('data-zm-text-reveal');
+    }
+    
+    // let text = element.getAttribute(mediaQuery.matches ? 'data-zm-text-reveal-mobile' : 'data-zm-text-reveal')?.trim();
 
     if (!text) {
-      element.innerHTML = '';
+      element.innerText = '';
       return;
     }
-
+  
     let chars = text.split('');
-
-    element.innerHTML = '';
+    element.innerText = '';
+  
     chars.forEach((char) => {
-      const html = `<span class="zm-reveal-char-wrap">
-                      <span class="zm-reveal-char">${char}</span>
-                      <span class="zm-reveal-char-alt">${char}</span>
-                    </span>`;
-      element.insertAdjacentHTML('beforeend', html);
+      if (char === ' ') {
+        element.insertAdjacentHTML('beforeend', `<span class="zm-reveal-char__space">&nbsp;</span>`);
+      } else {
+        const html = `<span class='zm-reveal-char__wrap' data-ui-reveal-char-wrap aria-hidden='true'>
+                        <span class='zm-reveal-char zm-reveal-char--primary' data-ui-reveal-char>${char}</span>
+                        <span class='zm-reveal-char zm-reveal-char--alt' data-ui-reveal-char-alt>${char}</span>
+                      </span>`;
+        element.insertAdjacentHTML('beforeend', html);
+      }
     });
+  }
 
-    setTimeout(() => {
-      const charElements = element.querySelectorAll('.zm-reveal-char');
+  function revealText(element) {
+
+    insertChars(element);
+
+    const charElements = element.querySelectorAll('[data-ui-reveal-char]');
+    if (charElements.length === 0) return;
+
+    let animationPromises = [];
+    let isPaused = false;
+    
+    function startAnimations() {
+      if (isPaused) return;
+
+      animationPromises = [];
       charElements.forEach((char, index) => {
-        setTimeout(() => {
-          char.classList.add('zm-reveal-char--active');
-        }, index * 70);
+        animationPromises.push(animateChar(char, index * 70, 600, 100, 0));
       });
-    }, 800);
-  });
+
+      if (animationPromises.length > 0) {
+        setTimeout(() => {
+          Promise.all(animationPromises).then(() => {
+            pauseControl.resumeType('typewriter');
+      
+            if (element.hasAttribute('data-zm-text-reveal-hover')) {
+              swapCharOnHover(element);
+            }
+          });
+        }, 400);
+      }
+    }
+
+    function pause() {
+      isPaused = true;
+      animationPromises.forEach(animation => animation.cancel());
+    }
+
+    function resume() {
+      if (!isPaused) return;
+      isPaused = false;
+      startAnimations();
+    }
+
+    if (element.hasAttribute('data-pause')) {
+      pauseControl.register(element, 'text-reveal', pause, resume);
+      console.log(pauseControl);
+    }
+    startAnimations();
+  }
+
+  function handleMouseEnterCharWrap(event) {
+    const charWrap = event.currentTarget;
+    const char = charWrap.querySelector('[data-ui-reveal-char]');
+    const charAlt = charWrap.querySelector('[data-ui-reveal-char-alt]');
+    animateChar(char, 0, 600, 0, -100);
+    animateChar(charAlt, 0, 600, 100, 0);
+  }
+
+  function swapCharOnHover(element) {
+    const charWraps = element.querySelectorAll('[data-ui-reveal-char-wrap]');
+
+    charWraps.forEach((charWrap) => {
+      charWrap.addEventListener('mouseenter', handleMouseEnterCharWrap);
+    });
+  }
+
+  function handleBreakpointChange() {
+    document.querySelectorAll('[data-zm-text-reveal]').forEach(revealText);
+  }
+
+  handleBreakpointChange();
+  mediaQuery.addEventListener('change', handleBreakpointChange);
 }
 
 /**
+ * Initializes all typewriter animations with cursor.
  * 
+ * - Clears any existing typewriter timeouts to prevent overlap.
  */
-function initTextScramble() {
-  const textScrambles = document.querySelectorAll('[data-text-scramble]');
+function initTextTypewriters() {
+  const mediaQuery = window.matchMedia('(max-width: 575px)');
+  const timeoutControl = timeoutController();
+  const pauseControl = pauseController();
+
+  function runTypewriters() {
+    timeoutControl.clearAll();
+
+    const typeWriters = document.querySelectorAll('[data-zm-text-typewriter]');
+
+    typeWriters.forEach((typeWriter) => {
+      let text = decodeHTML(typeWriter.getAttribute('data-zm-text-typewriter') || '');
+      let index = 0;
+      let timeoutId = null;
+      let isPaused = false;
+
+      typeWriter.classList.add('zm-typewriter');
+      typeWriter.innerHTML = '&nbsp;';
+
+      function type() {
+        if (isPaused) return;
+
+        if (index === 0) {
+          typeWriter.classList.add('zm-typewriter--visible');
+          typeWriter.innerHTML = text[0] || '';
+          index = 1;
+        }
+
+        if (index < text.length) {
+          timeoutId = setTimeout(() => {
+            if (isPaused) return;
+            typeWriter.textContent += text[index];
+            index++;
+            type();
+          }, 60);
+          
+          timeoutControl.add(timeoutId);
+        } else {
+          typeWriter.classList.add('zm-typewriter--blink');
+        }
+      }
+
+      function pause() {
+        isPaused = true;
+        if (timeoutId !== null) {
+          clearTimeout(timeoutId);
+        }
+      }
+
+      function resume() {
+        if (!isPaused) return;
+        isPaused = false;
+
+        if (index >= text.length) {
+          typeWriter.classList.add('zm-typewriter--blink');
+          return;
+        }
+
+        type();
+      }
+
+      pauseControl.register(typeWriter, 'typewriter', pause, resume);
+
+      type();
+    });
+  }
+
+  runTypewriters();
+  mediaQuery.addEventListener('change', runTypewriters);
+}
+
+
+
+/**
+ * Applies a text scrambling effect to elements on hover.
+ */
+function initTextScrambles() {
+  const textScrambles = document.querySelectorAll('[data-zm-text-scramble]');
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
   textScrambles.forEach(element => {
@@ -295,18 +635,18 @@ function initTextScramble() {
 
     let originalText = textNode.textContent.trim();
 
-    element.addEventListener("mouseenter", () => {
+    element.addEventListener('mouseenter', () => {
       let iteration = 0;
       let interval = setInterval(() => {
         textNode.textContent = originalText
-          .split("")
+          .split('')
           .map((letter, index) => {
             if (index < iteration) {
               return originalText[index];
             }
             return letters[Math.floor(Math.random() * 26)];
           })
-          .join("");
+          .join('');
 
         if (iteration >= originalText.length) {
           clearInterval(interval);
@@ -317,236 +657,3 @@ function initTextScramble() {
     });
   });
 }
-
-function initTextTypewriter() {
-  const elements = document.querySelectorAll("[data-text-typewriter]");
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const element = entry.target;
-        const text = element.getAttribute("data-text-typewriter");
-        let index = 0;
-
-        element.classList.add("zm-typewriter");
-
-        setTimeout(() => {
-          const interval = setInterval(() => {
-            element.textContent = text.slice(0, index);
-            index++;
-
-            if (index > text.length) {
-              clearInterval(interval);
-              observer.unobserve(element);
-            }
-          }, 60);
-        }, 1800);
-      }
-    });
-  }, { threshold: 0.1 });
-
-  elements.forEach(element => observer.observe(element));
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*function initCardCursor() {
-  const workSection = document.querySelector('[data-work-section]');
-  const cursor = document.querySelector('[data-work-cursor]');
-  const carousels = document.querySelectorAll('[data-work-box-carousel]');
-
-  workSection.addEventListener('mousemove', (e) => {
-    cursor.style.left = `${e.clientX}px`;
-    cursor.style.top = `${e.clientY}px`;
-  });
-
-  carousels.forEach((carousel) => {
-    carousel.addEventListener('mouseenter', () => {
-      const workBox = carousel.closest('.work-box');
-      if (workBox) workBox.classList.add('work-box--active');
-      cursor.classList.add('work__cursor--active');
-    });
-
-    carousel.addEventListener('mouseleave', () => {
-      const workBox = carousel.closest('.work-box');
-      if (workBox) workBox.classList.remove('work-box--active');
-      cursor.classList.remove('work__cursor--active');
-    });
-  });
-}*/
-
-/*function initCardTilt() {
-  const carousels = document.querySelectorAll('[data-work-box-carousel]');
-
-  carousels.forEach((carousel) => {
-    carousel.addEventListener('mousemove', (e) => {
-      const rect = carousel.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      let rotateX = ((centerY - y) / centerY) * 10;
-      let rotateY = ((x - centerX) / centerX) * 10;
-
-      carousel.style.transition = 'transform 0.1s ease-out';
-      carousel.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    });
-
-    carousel.addEventListener('mouseleave', () => {
-      carousel.style.transition = 'transform 0.5s ease-out';
-      carousel.style.transform = 'rotateX(0deg) rotateY(0deg)';
-    });
-  });
-}*/
-
-
-/**
- * 
- * @param {*} mouse 
- */
-/*function initWorkInfo(mouse) {
-  const workSection = document.querySelector('[data-work-section]');
-  const workBoxes = document.querySelectorAll('[data-work-box]');
-  let isMouseInsideWorkSection = false;
-  let activeWorkBox = null;
-
-  document.addEventListener('scroll', handleScroll);
-  workSection.addEventListener('mouseenter', handleMouseEnterWorkSection);
-  workSection.addEventListener('mouseleave', handleMouseLeaveWorkSection);
-  workSection.addEventListener('mousemove', handleMouseMoveInWorkSection);
-
-  addWorkBoxListeners();
-  handleScroll();
-
-  // Handlers
-  function handleScroll() {
-    checkMouseInWorkSection();
-    if (isMouseInsideWorkSection) {
-      console.log('test4');
-      checkMouseInWorkBox();
-      updateInfoPositions();
-    } else {
-      resetWorkBoxes();
-    }
-  }
-
-  function handleMouseEnterWorkSection() {
-    isMouseInsideWorkSection = true;
-    checkMouseInWorkBox(); 
-  }
-
-  function handleMouseLeaveWorkSection() {
-    isMouseInsideWorkSection = false;
-  }
-
-  function handleMouseMoveInWorkSection() {
-    checkMouseInWorkBox();
-    updateInfoPositions();
-  }
-
-  // Helpers
-  function addWorkBoxListeners() {
-    workBoxes.forEach((box) => {
-      box.addEventListener('mouseenter', handleMouseEnterWorkBox);
-      box.addEventListener('mouseleave', handleMouseLeaveWorkBox);
-  
-      function handleMouseEnterWorkBox() {
-        activateWorkBox(box);
-      }
-  
-      function handleMouseLeaveWorkBox() {
-        deactivateWorkBox(box);
-      }
-    });
-  }
-
-  function checkMouseInWorkSection() {
-    const rect = workSection.getBoundingClientRect();
-    
-    const isMouseInBounds =
-      mouse.x >= rect.left &&
-      mouse.x <= rect.right &&
-      mouse.y >= rect.top &&
-      mouse.y <= rect.bottom;
-
-    if (isMouseInBounds) {
-      isMouseInsideWorkSection = true;
-    } else {
-      isMouseInsideWorkSection = false;
-    }
-  }
-
-  function checkMouseInWorkBox() {
-    let newActiveBox = null;
-  
-    workBoxes.forEach((box) => {
-      const rect = box.getBoundingClientRect();
-      
-      const isMouseInBounds =
-        mouse.x >= rect.left &&
-        mouse.x <= rect.right &&
-        mouse.y >= rect.top &&
-        mouse.y <= rect.bottom;
-  
-      if (isMouseInBounds) {
-        newActiveBox = box;
-      }
-    });
-  
-    if (newActiveBox && newActiveBox !== activeWorkBox) {
-      activateWorkBox(newActiveBox);
-    } else if (!newActiveBox) {
-      resetWorkBoxes();
-    }
-  }
-
-  function updateInfoPositions() {
-    workBoxes.forEach((box) => {
-      const info = box.querySelector('[data-work-info]');
-      const { offsetWidth: infoWidth, offsetHeight: infoHeight } = info;
-
-      info.style.left = `${mouse.x - infoWidth / 2}px`;
-      info.style.top = `${mouse.y - infoHeight / 2}px`;
-    });
-  }
-
-  function activateWorkBox(box) {
-    resetWorkBoxes();
-    activeWorkBox = box;
-    box.classList.add('work-box--active');
-  }
-
-  function deactivateWorkBox(box) {
-    if (activeWorkBox === box) {
-      activeBox = null;
-      box.classList.remove('work-box--active');
-    }
-  }
-
-  function resetWorkBoxes() {
-    workBoxes.forEach((box) => {
-      box.classList.remove('work-box--active');
-    });
-    activeWorkBox = null;
-  }
-}*/

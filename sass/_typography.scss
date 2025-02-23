@@ -1,22 +1,15 @@
 @use 'variables';
 
 @font-face {
-  font-family: 'PraterSans';
+  font-family: 'Prater Sans';
   src: url('https://zachjonmitch.com/dist/fonts/PraterSans-Bold.woff2') format('woff2');
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'PraterSans';
+  font-family: 'Prater Sans';
   src: url('https://zachjonmitch.com/dist/fonts/PraterSans-Regular.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Danegren';
-  src: url('https://zachjonmitch.com/dist/fonts/Danegren-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }

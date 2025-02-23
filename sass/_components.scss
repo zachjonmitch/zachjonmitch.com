@@ -141,6 +141,10 @@
         margin-left: 0;
       }
 
+      .zm-navbar__secondary-menu {
+        margin-top: auto;
+      }
+
       .zm-navbar__list {
         flex-direction: column;
         gap: 10px;
@@ -369,51 +373,79 @@
   color: variables.$color-green;
 }
 
-.zm-reveal-char-wrap {
+.zm-reveal-char__wrap {
   display: inline-block;
   overflow: hidden;
   position: relative;
-  cursor: variables.$cursor-inverse-default;
+  cursor: variables.$cursor-default;
   // pointer-events: auto;
 }
 
 .zm-reveal-char {
   display: inline-block;
   transform: translateY(100%);
-  transition: .3s cubic-bezier(.68,-.55,.265,1.55);
+  // transition: .3s cubic-bezier(.68,-.55,.265,1.55);
 }
 
-.zm-reveal-char--active {
-  transform: translateY(0);
-}
+// .zm-reveal-char-wrap--active .zm-reveal-char {
+//   transform: translateY(0);
+//   visibility: visible;
+// }
 
-.zm-reveal-char-alt {
+// .zm-reveal-char-wrap--active .zm-reveal-char-alt {
+//   visibility: visible;
+// }
+
+.zm-reveal-char--alt {
   position: absolute;
   left: 0;
   top: 0;
-  transform: translateY(100%);
-  transition: .35s cubic-bezier(.68,-.55,.265,1.55);
+  // transition: .35s cubic-bezier(.68,-.55,.265,1.55);
 }
 
-.zm-reveal-char-wrap:hover .zm-reveal-char {
+/*.zm-reveal-char-wrap:hover .zm-reveal-char {
   transform: translateY(-100%);
 }
 
 .zm-reveal-char-wrap:hover .zm-reveal-char-alt {
   transform: translateY(0);
   transition: .4s cubic-bezier(.68,-.55,.265,1.55);
-}
+}*/
 
-.zm-reveal-char,
-.zm-reveal-char-alt {
-  line-height: 1;
-}
-
-[data-text-typewriter] {
-  height: 1.2em;
-  visibility: hidden;
-}
+// .zm-reveal-char,
+// .zm-reveal-char-alt {
+//   line-height: 1;
+//   visibility: hidden;
+// }
 
 .zm-typewriter {
-  visibility: visible;   /* Makes text visible when the effect starts */
+  position: relative;
+}
+
+.zm-typewriter::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: calc(50%);
+  transform: translateY(-50%);
+  height: calc(100%);
+  width: 3px;
+  background-color: #05f802;
+  border-radius: 0px;
+}
+
+.zm-typewriter--blink::after {
+  // animation: blink 1.1s step-end infinite;
+  display: none;
+}
+
+[data-zm-text-typewriter] {
+  display: inline-block;
+  visibility: hidden;
+  white-space: nowrap;
+  min-height: 1em;
+}
+
+.zm-typewriter--visible {
+  visibility: visible;
 }

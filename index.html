@@ -7,20 +7,24 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/dist/img/zm-favicon.ico">
   <link rel="preload" href="https://zachjonmitch.com/dist/fonts/PraterSans-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
   <link rel="preload" href="https://zachjonmitch.com/dist/fonts/PixelifySans-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <!-- <link rel="preload" as="image" href="/dist/img/screenshot-g2-sell.jpg" type="image/jpeg">
+  <link rel="preload" as="image" href="/dist/img/screenshot-rmr.jpg" type="image/jpeg">
+  <link rel="preload" as="image" href="dist/img/screenshot-g2-reach.jpg" type="image/jpeg">
+  <link rel="preload" as="image" href="dist/img/screenshot-rrfc.jpg" type="image/jpeg"> -->
   <link rel="stylesheet" href="/dist/css/styles.min.css">
 </head>
 <body>
-  <canvas class="canvas-bg" data-canvas-bg></canvas>
+  <canvas class="canvas-bg" data-ui-canvas-bg style="position:fixed;"></canvas>
   <header class="page-header">
     <nav class="zm-navbar">
       <div class="zm-navbar__grid">
         <div class="zm-navbar__brand">
           <a class="zm-navbar__brand-link" href="#info">
-            <img class="zm-navbar__brand-headshot d-block" src="dist/img/headshot-zm.webp" width="42" alt="Zach Mitchell Headshot">
+            <img class="zm-navbar__brand-headshot d-block" src="dist/img/headshot-zm.webp" alt="Zach Mitchell Headshot" width="42">
           </a>
         </div>
-        <div class="zm-navbar__collapse" data-navbar-collapse>
-          <button class="zm-navbar__close-button zm-button-circle zm-button-circle--green zm-button-circle--3d d-lg-none" data-navbar-close-button>
+        <div class="zm-navbar__collapse" data-ui-navbar-collapse>
+          <button class="zm-navbar__close-button zm-button-circle zm-button-circle--green zm-button-circle--3d d-lg-none" data-ui-navbar-close-button>
             <svg class="zm-navbar__close-icon" fill="currentColor" width="20" height="20">
               <use xlink:href="/dist/img/icons/icons-sprite.svg#icon-circle-xmark"></use>
             </svg>
@@ -28,10 +32,12 @@
           <div class="zm-navbar__primary-menu">
             <ul class="zm-navbar__list">
               <li class="zm-navbar__item">
-                <a class="zm-navbar__link" href="#info">Info</a>
+                <!-- <a class="zm-navbar__link" data-zm-text-reveal="Info" data-zm-text-reveal-mode="mobile" href="#info">Info</a> -->
+                <a class="zm-navbar__link" href="#info" data-zm-text-reveal="Info" data-zm-text-reveal-mobile="Info" data-zm-text-reveal-mode="mobile" data-pause>Info</a>
               </li>
               <li class="zm-navbar__item">
-                <a class="zm-navbar__link" href="#work">Work & Tools</a>
+                <!-- <a class="zm-navbar__link" data-zm-text-reveal="Work & Tools" data-zm-text-reveal-mode="mobile" href="#work">Work & Tools</a> -->
+                <a class="zm-navbar__link" href="#work" data-zm-text-reveal="Work & Tools" data-zm-text-reveal-mobile="Work & Tools" data-zm-text-reveal-mode="mobile" data-pause>Work & Tools</a>
               </li>
             </ul>
           </div>
@@ -61,7 +67,7 @@
                 </li>
               </ul>                       
             </div>
-            <a class="zm-navbar__button d-none d-lg-flex" href="mailto:zachjonmitch@gmail.com" data-text-scramble>
+            <a class="zm-navbar__button d-none d-lg-flex" data-zm-text-scramble href="mailto:zachjonmitch@gmail.com">
               Say Hello 
               <svg class="zm-navbar__button-icon" fill="currentColor">
                 <use xlink:href="/dist/img/icons/icons-sprite.svg#icon-email"></use>
@@ -69,30 +75,47 @@
             </a>
           </div>
         </div>
-        <button class="zm-navbar__toggle d-lg-none" data-navbar-toggle>
-          <svg class="zm-navbar__toggle-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M464 256H48a48 48 0 0 0 0 96h416a48 48 0 0 0 0-96zm16 128H32a16 16 0 0 0 -16 16v16a64 64 0 0 0 64 64h352a64 64 0 0 0 64-64v-16a16 16 0 0 0 -16-16zM58.6 224h394.7c34.6 0 54.6-43.9 34.8-75.9C448 83.2 359.6 32.1 256 32c-103.5 .1-192 51.2-232.2 116.1C4 180.1 24.1 224 58.6 224zM384 112a16 16 0 1 1 -16 16 16 16 0 0 1 16-16zM256 80a16 16 0 1 1 -16 16 16 16 0 0 1 16-16zm-128 32a16 16 0 1 1 -16 16 16 16 0 0 1 16-16z"/></svg>
+        <button class="zm-navbar__toggle d-lg-none" data-ui-navbar-toggle>
+          <svg class="zm-navbar__toggle-icon" fill="currentColor">
+            <use xlink:href="/dist/img/icons/icons-sprite.svg#icon-hamburger"></use>
+          </svg>
         </button>
       </div>
     </nav>
   </header>
   <main class="page-content">
-    <section class="hero" id="info">
+    <section id="info" class="hero">
       <div class="hero__container zm-container zm-container--expand">
         <header class="hero__header">
-          <h1 class="hero__name h2 mt-3 mb-4" aria-label="Zach Mitchell">
-            <span class="hero__first-name d-block" data-text-reveal="Zachary" data-text-reveal-mobile="Zach"></span>
-            <span class="hero__first-middle d-block" data-text-reveal="" data-text-reveal-mobile="Jon"></span>
-            <span class="hero__last-name d-block" data-text-reveal="Mitchell" data-text-reveal-mobile="Mitch"></span>
+          <h1 class="hero__name h2 mt-3 mb-3" aria-label="Zach Mitchell" aria-hidden="true">
+            <span class="hero__first-name d-block" 
+                  data-zm-text-reveal="Zachary" 
+                  data-zm-text-reveal-mobile="Zach" 
+                  data-zm-text-reveal-hover 
+                  aria-hidden="true"></span>
+            <span class="hero__first-middle d-block" 
+                  data-zm-text-reveal="" 
+                  data-zm-text-reveal-mobile="Jon" 
+                  data-zm-text-reveal-hover 
+                  aria-hidden="true"></span>
+            <span class="hero__last-name d-block" 
+                  data-zm-text-reveal="Mitchell" 
+                  data-zm-text-reveal-mobile="Mitch" 
+                  data-zm-text-reveal-hover 
+                  aria-hidden="true"></span>
           </h1>
-          <h2 class="hero__job-title text-body" aria-label="Frontend Engineer" data-text-typewriter="&lt;FrontendEngineer/&gt;"></h2>
+          <h2 class="hero__job-title text-body mb0" 
+              data-zm-text-typewriter="&lt;FrontendEngineer/&gt;" 
+              data-pause 
+              aria-label="Frontend Engineer"></h2>
         </header>
       </div>
     </section>
-    <section class="work py-4" id="work" data-work-section>
+    <section id="work" class="work py-4">
       <div class="zm-container">
         <div class="work__grid">
           <div class="work__row">
-            <div class="work-box">
+            <div class="work-box work-box--g2-sell">
               <div class="zm-toolbar">
                 <div class="zm-toolbar__dots">
                   <div class="zm-toolbar__dot"></div>
@@ -101,10 +124,10 @@
                 </div>
                 <span class="zm-toolbar__text">https://sell.g2.com/</span>
               </div>
-              <div class="work-box__carousel" data-work-box-carousel>
-                <div class="work-box__track" data-work-box-track data-speed="70">
-                  <img class="work-box__image" src="/dist/img/screenshot-g2-sell.webp" alt="G2 Sell">
-                  <img class="work-box__image" src="/dist/img/screenshot-g2-sell.webp" alt="G2 Sell">
+              <div class="work-box__carousel">
+                <div class="work-box__track" data-ui-work-box-track data-track-speed="115">
+                  <div class="work-box__slide"></div>
+                  <div class="work-box__slide"></div>
                 </div>
               </div>
               <div class="work-info">
@@ -118,7 +141,7 @@
                 </div>
               </div>
             </div>
-            <div class="work-box">
+            <div class="work-box work-box--rmr">
               <div class="zm-toolbar">
                 <div class="zm-toolbar__dots">
                   <div class="zm-toolbar__dot"></div>
@@ -127,10 +150,10 @@
                 </div>
                 <span class="zm-toolbar__text">https://www.rmrbullets.com/</span>
               </div>
-              <div class="work-box__carousel" data-work-box-carousel>
-                <div class="work-box__track" data-work-box-track data-speed="46">
-                  <img class="work-box__image" src="/dist/img/screenshot-rmr.webp" alt="RMR Bullets">
-                  <img class="work-box__image" src="/dist/img/screenshot-rmr.webp" alt="RMR Bullets">
+              <div class="work-box__carousel">
+                <div class="work-box__track" data-ui-work-box-track data-track-speed="210">
+                  <div class="work-box__slide"></div>
+                  <div class="work-box__slide"></div>
                 </div>
               </div>
               <div class="work-info">
@@ -146,7 +169,7 @@
             </div>
           </div>
           <div class="work__row">
-            <div class="work-box">
+            <div class="work-box work-box--rrfc">
               <div class="zm-toolbar">
                 <div class="zm-toolbar__dots">
                   <div class="zm-toolbar__dot"></div>
@@ -155,10 +178,10 @@
                 </div>
                 <span class="zm-toolbar__text">https://rrfedu.com/weekly-report/</span>
               </div>
-              <div class="work-box__carousel" data-work-box-carousel>
-                <div class="work-box__track" data-work-box-track data-speed="105">
-                  <img class="work-box__image" src="/dist/img/screenshot-rrfc.webp" alt="RRFC">
-                  <img class="work-box__image" src="/dist/img/screenshot-rrfc.webp" alt="RRFC">
+              <div class="work-box__carousel">
+                <div class="work-box__track" data-ui-work-box-track data-track-speed="80">
+                  <div class="work-box__slide"></div>
+                  <div class="work-box__slide"></div>
                 </div>
               </div>
               <div class="work-info">
@@ -172,7 +195,7 @@
                 </div>
               </div>
             </div>
-            <div class="work-box">
+            <div class="work-box work-box--g2-reach">
               <div class="zm-toolbar">
                 <div class="zm-toolbar__dots">
                   <div class="zm-toolbar__dot"></div>
@@ -181,10 +204,10 @@
                 </div>
                 <span class="zm-toolbar__text">https://reach.g2.com/</span>
               </div>
-              <div class="work-box__carousel" data-work-box-carousel>
-                <div class="work-box__track" data-work-box-track data-speed="70">
-                  <img class="work-box__image" src="/dist/img/screenshot-g2-reach.webp" alt="G2 Reach">
-                  <img class="work-box__image" src="/dist/img/screenshot-g2-reach.webp" alt="G2 Reach">
+              <div class="work-box__carousel">
+                <div class="work-box__track" data-ui-work-box-track data-track-speed="130">
+                  <div class="work-box__slide"></div>
+                  <div class="work-box__slide"></div>
                 </div>
               </div>
               <div class="work-info">
@@ -203,6 +226,6 @@
       </div>
     </section>
   </main>
-  <script src="/dist/js/index.min.js"></script>
+  <script type="module" src="/dist/js/index.min.js"></script>
 </body>
 </html>
