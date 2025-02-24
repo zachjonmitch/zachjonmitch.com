@@ -1,9 +1,15 @@
 import { initAsteroids } from "./asteroids.js";
+import { windowResizeController } from "./utils/window-resize-controller.js";
+import { windowScrollController } from "./utils/window-scroll-controller.js";
+import { pauseController } from "./utils/pause-controller.js";
+import { timeoutController } from "./utils/timeout-controller.js";
+import { observeElements } from "./utils/observe-elements.js";
 
 document.addEventListener('DOMContentLoaded', () => {
   initSiteBackground();
   initParallax();
-  initAsteroids();
+  // initAsteroids();
+  initGameKeys();
   initMobileMenu();
   initAnchorScroll();
   initTextReveals();
@@ -11,264 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initTextScrambles();
   initWorkCarousels();
 });
-
-
-/**
- * Controls all elements with `data-pause` attributes.
- * 
- * - Allows pausing/resuming of a specific element, by type, or all at once.
- * 
- * @returns {{
- *   register: (element: HTMLElement, type: string, onPause: Function, onResume: Function),
- *   pauseAll: Function,
- *   resumeAll: Function,
- *   pauseType: (type?: string),
- *   resumeType: (type?: string),
- *   resumeElement: (element: HTMLElement),
- * }}
- */
-function pauseController() {
-  if (!pauseController.instance) {
-    let elements = new WeakMap();
-    let trackedElements = new Set();
-
-    pauseController.instance = {
-      register: (element, type, onPause, onResume) => {
-        if (!elements.has(element)) {
-          elements.set(element, { type, pause: onPause, resume: onResume });
-          trackedElements.add(element);
-
-          if (element.hasAttribute('data-pause')) {
-            onPause();
-          }
-        }
-      },
-      pauseAll: () => {
-        trackedElements.forEach(element => {
-          const entry = elements.get(element);
-          if (entry) entry.pause();
-        });
-      },
-      resumeAll: () => {
-        trackedElements.forEach(element => {
-          const entry = elements.get(element);
-          if (entry) entry.resume();
-        });
-      },
-      pauseType: (type = null) => {
-        trackedElements.forEach(element => {
-          const entry = elements.get(element);
-          if (entry && (!type || entry.type === type)) {
-            entry.pause();
-          }
-        });
-      },
-      resumeType: (type = null) => {
-        trackedElements.forEach(element => {
-          const entry = elements.get(element);
-          if (entry && (!type || entry.type === type)) {
-            entry.resume();
-          }
-        });
-      },
-      resumeElement: (element) => {
-        const entry = elements.get(element);
-        if (entry) entry.resume();
-      }
-    };
-  }
-
-  return pauseController.instance;
-}
-
-
-/**
- * Manages window scroll events.
- * 
- * @returns {{
-*  subscribe: (callback: Function),
-*  unsubscribe: (callback: Function)
-* }}
-*/
-function windowScrollController() {
-  if (!windowScrollController.instance) {
-  const subscribers = new Set();
-
-  windowScrollController.instance = {
-    subscribe: (callback) => {
-      subscribers.add(callback);
-    },
-    unsubscribe: (callback) => {
-      subscribers.delete(callback);
-    }
-  }
-
-  window.addEventListener('scroll', (event) => {
-    subscribers.forEach(callback => {
-      callback(event);
-    });
-  });
-  }
-
-  return windowScrollController.instance;
-}
-
-/**
- * Manages window resize events.
- * 
- * @returns {{
-*  subscribe: (callback: Function),
-*  unsubscribe: (callback: Function)
-* }}
-*/
-function windowResizeController() {
- if (!windowResizeController.instance) {
-   const subscribers = new Set();
-
-   windowResizeController.instance = {
-     subscribe: (callback) => subscribers.add(callback),
-     unsubscribe: (callback) => subscribers.delete(callback)
-   };
-
-   window.addEventListener('resize', (event) => {
-     subscribers.forEach(callback => callback(event));
-   });
- }
-
- return windowResizeController.instance;
-}
-
-
-/**
- * Allows for multiple timeouts to be tracked and cleared to avoid conflicts.
- * 
- * @returns {{
- *   add: (id: number),
- *   clearAll: Function
- * }}
- */
-function timeoutController() {
-  if (!timeoutController.instance) {
-    let timeouts = new Set();
-
-    timeoutController.instance = {
-      add: (id) => timeouts.add(id),
-      clearAll: () => {
-        timeouts.forEach(clearTimeout);
-        timeouts.clear();
-      }
-    };
-  }
-
-  return timeoutController.instance;
-}
-
-
-/**
- * Observes elements with given selector using the Intersection Observer API.
- * 
- * @param {string} selector 
- * @param {Function} onIntersect 
- * @param {IntersectionObserverInit} options 
- * @returns {IntersectionObserver}
- */
-function observeElements(selector, onIntersect, options = { root: null, threshold: 0 }) {
-  const elements = document.querySelectorAll(selector);
-  const observer = new IntersectionObserver(entries => {
-    requestAnimationFrame(() => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          onIntersect(entry, observer);
-        }
-      });
-    });
-  }, options);
-
-  elements.forEach(element => observer.observe(element));
-  return observer;
-}
-
-
-/**
- * Decodes HTML entities in a given string.
- * 
- * @param {string} html
- * @returns {string}
- */
-function decodeHTML(html) {
-  var txt = document.createElement("textarea");
-  txt.innerHTML = html;
-  return txt.value;
-}
-
-/**
- * Linearly interpolates between two values.
- * 
- * @param {number} start
- * @param {number} end
- * @param {number} factor (0 = no change, 1 = full change).
- * @returns {number}
- */
-function lerp(start, end, factor) {
-  return start + (end - start) * factor;
-}
-
-/**
- * Initializes the parallax scrolling effect for elements with the `data-parallax` attribute.
- * 
- * - Moves elements horizontally and/or vertically based on scroll position.
- * - Sets optional start/stop points.
- */
-function initParallax() {
-  const parallaxElements = document.querySelectorAll('[data-parallax]');
-  let lastScrollY = window.scrollY;
-  let ticking = false;
-
-  function updateParallax() {
-    const scrollY = window.scrollY;
-
-    if (scrollY === lastScrollY) {
-      ticking = false;
-      requestAnimationFrame(updateParallax);
-      return;
-    }
-
-    lastScrollY = scrollY;
-
-    parallaxElements.forEach(element => {
-      const speedX = parseFloat(element.dataset.parallaxSpeedX) || 0;
-      const speedY = parseFloat(element.dataset.parallaxSpeedY) || 0;
-
-      const hasStartX = element.hasAttribute('data-parallax-start-x');
-      const hasStopX = element.hasAttribute('data-parallax-stop-x');
-      const hasStartY = element.hasAttribute('data-parallax-start-y');
-      const hasStopY = element.hasAttribute('data-parallax-stop-y');
-
-      const startX = hasStartX ? parseFloat(element.dataset.parallaxStartX) : 0;
-      const stopX = hasStopX ? parseFloat(element.dataset.parallaxStopX) : Infinity;
-      const startY = hasStartY ? parseFloat(element.dataset.parallaxStartY) : 0;
-      const stopY = hasStopY ? parseFloat(element.dataset.parallaxStopY) : Infinity;
-
-      let moveX = startX + speedX * scrollY;
-      let moveY = startY + speedY * scrollY;
-
-      if (hasStartX && hasStopX) {
-        moveX = Math.min(Math.max(moveX, Math.min(startX, stopX)), Math.max(startX, stopX));
-      }
-      if (hasStartY && hasStopY) {
-        moveY = Math.min(Math.max(moveY, Math.min(startY, stopY)), Math.max(startY, stopY));
-      }
-
-      element.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
-    });
-
-    ticking = false;
-    requestAnimationFrame(updateParallax);
-  }
-
-  // Start the loop
-  requestAnimationFrame(updateParallax);
-}
 
 
 /**
@@ -297,6 +45,8 @@ function initSiteBackground() {
   let velocityX = -SPEED;
   let velocityY = 0;
   let lastTime = performance.now();
+
+  const resizeControl = windowResizeController();
 
   function resizeCanvas() {
     const pixelRatio = window.devicePixelRatio || 1;
@@ -386,7 +136,97 @@ function initSiteBackground() {
 
   resizeCanvas();
   patternImage.onload = () => requestAnimationFrame(draw);
-  window.addEventListener('resize', resizeCanvas);
+  resizeControl.subscribe(resizeCanvas);
+}
+
+
+/**
+ * Initializes the parallax scrolling effect for elements with the `data-parallax` attribute.
+ * 
+ * - Moves elements horizontally and/or vertically based on scroll position.
+ * - Sets optional start/stop points.
+ */
+function initParallax() {
+  const parallaxElements = document.querySelectorAll('[data-parallax]');
+  let lastScrollY = window.scrollY;
+  let ticking = false;
+
+  function updateParallax() {
+    const scrollY = window.scrollY;
+
+    if (scrollY === lastScrollY) {
+      ticking = false;
+      requestAnimationFrame(updateParallax);
+      return;
+    }
+
+    lastScrollY = scrollY;
+
+    parallaxElements.forEach(element => {
+      const speedX = parseFloat(element.dataset.parallaxSpeedX) || 0;
+      const speedY = parseFloat(element.dataset.parallaxSpeedY) || 0;
+
+      const hasStartX = element.hasAttribute('data-parallax-start-x');
+      const hasStopX = element.hasAttribute('data-parallax-stop-x');
+      const hasStartY = element.hasAttribute('data-parallax-start-y');
+      const hasStopY = element.hasAttribute('data-parallax-stop-y');
+
+      const startX = hasStartX ? parseFloat(element.dataset.parallaxStartX) : 0;
+      const stopX = hasStopX ? parseFloat(element.dataset.parallaxStopX) : Infinity;
+      const startY = hasStartY ? parseFloat(element.dataset.parallaxStartY) : 0;
+      const stopY = hasStopY ? parseFloat(element.dataset.parallaxStopY) : Infinity;
+
+      let moveX = startX + speedX * scrollY;
+      let moveY = startY + speedY * scrollY;
+
+      if (hasStartX && hasStopX) {
+        moveX = Math.min(Math.max(moveX, Math.min(startX, stopX)), Math.max(startX, stopX));
+      }
+      if (hasStartY && hasStopY) {
+        moveY = Math.min(Math.max(moveY, Math.min(startY, stopY)), Math.max(startY, stopY));
+      }
+
+      element.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
+    });
+
+    ticking = false;
+    requestAnimationFrame(updateParallax);
+  }
+
+  requestAnimationFrame(updateParallax);
+}
+
+
+function initGameKeys() {
+  const keys = document.querySelectorAll("[data-ui-game-controls-key]");
+
+  const handleKeydown = (event) => {
+    const keyPressed = event.key.toUpperCase();
+
+    if (keyPressed === " ") {
+      event.preventDefault();
+    }
+
+    keys.forEach((keyElement) => {
+      const keyData = keyElement.dataset.uiGameControlsKey.toUpperCase();
+      if (keyData === keyPressed || (keyData === "SPACE" && keyPressed === " ")) {
+        keyElement.classList.add("game-controls__key--active");
+      }
+    });
+  };
+
+  const handleKeyup = (event) => {
+    const keyReleased = event.key.toUpperCase();
+    keys.forEach((keyElement) => {
+      const keyData = keyElement.dataset.uiGameControlsKey.toUpperCase();
+      if (keyData === keyReleased || (keyData === "SPACE" && keyReleased === " ")) {
+        keyElement.classList.remove("game-controls__key--active");
+      }
+    });
+  };
+
+  document.addEventListener("keydown", handleKeydown);
+  document.addEventListener("keyup", handleKeyup);
 }
 
 
@@ -556,7 +396,6 @@ function initWorkCarousels() {
  * - Adds hover effect that swaps characters with an alt version.
  */
 function initTextReveals() {
-  const elements = document.querySelectorAll('[data-zm-text-reveal]');
   const mediaQuery = window.matchMedia('(max-width: 575px)');
   const pauseControl = pauseController();
 
@@ -589,8 +428,6 @@ function initTextReveals() {
     } else {
       text = element.getAttribute('data-zm-text-reveal');
     }
-    
-    // let text = element.getAttribute(mediaQuery.matches ? 'data-zm-text-reveal-mobile' : 'data-zm-text-reveal')?.trim();
 
     if (!text) {
       element.innerText = '';
@@ -627,12 +464,13 @@ function initTextReveals() {
       if (isPaused) return;
 
       animationPromises = [];
-      charElements.forEach((char, index) => {
-        animationPromises.push(animateChar(char, index * 70, 600, 100, 0));
-      });
 
-      if (animationPromises.length > 0) {
-        setTimeout(() => {
+      setTimeout(() => {
+        charElements.forEach((char, index) => {
+          animationPromises.push(animateChar(char, index * 70, 600, 100, 0));
+        });
+
+        if (animationPromises.length > 0) {
           Promise.all(animationPromises).then(() => {
             pauseControl.resumeType('typewriter');
       
@@ -640,8 +478,8 @@ function initTextReveals() {
               swapCharOnHover(element);
             }
           });
-        }, 400);
-      }
+        }
+      }, 500);
     }
 
     function pause() {
@@ -797,4 +635,29 @@ function initTextScrambles() {
       }, 30);
     });
   });
+}
+
+/**
+ * Decodes HTML entities in a given string.
+ * 
+ * @param {string} html
+ * @returns {string}
+ */
+function decodeHTML(html) {
+  var txt = document.createElement("textarea");
+  txt.innerHTML = html;
+  return txt.value;
+}
+
+
+/**
+ * Linearly interpolates between two values.
+ * 
+ * @param {number} start
+ * @param {number} end
+ * @param {number} factor (0 = no change, 1 = full change).
+ * @returns {number}
+ */
+function lerp(start, end, factor) {
+  return start + (end - start) * factor;
 }

@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="/dist/css/styles.min.css">
 </head>
 <body>
-  <canvas class="canvas-bg z-0" data-ui-canvas-bg style="position:fixed;"></canvas>
+  <canvas class="canvas-bg z-0" data-ui-canvas-bg style="position: fixed;"></canvas>
   <header class="page-header z-3">
     <nav class="zm-navbar">
       <div class="zm-navbar__grid">
@@ -100,8 +100,9 @@
   </header>
   <main class="page-content">
     <section id="hero" class="hero">
+      <canvas class="canvas-game z-1" data-ui-canvas-game style="position: absolute;"></canvas>
       <div class="hero__container zm-container zm-container--expand">
-        <header class="hero__header" data-parallax data-parallax-speed-y=".18">
+        <header class="hero__header" data-parallax data-parallax-speed-y=".12">
           <h1 class="hero__name h2 mt-3 mb-3" aria-label="Zach Mitchell" aria-hidden="true">
             <span class="hero__first-name d-block" 
                   data-zm-text-reveal="Zachary" 
@@ -124,6 +125,15 @@
               data-pause 
               aria-label="Frontend Engineer"></h2>
         </header>
+      </div>
+      <div class="game-controls d-none d-lg-block">
+        <div class="game-controls__grid">
+          <span class="game-controls__key game-controls__key--w" data-ui-game-controls-key="w">W</span>
+          <span class="game-controls__key game-controls__key--a" data-ui-game-controls-key="a">A</span>
+          <span class="game-controls__key game-controls__key--s" data-ui-game-controls-key="s">S</span>
+          <span class="game-controls__key game-controls__key--d" data-ui-game-controls-key="d">D</span>
+          <span class="game-controls__key game-controls__key--space" data-ui-game-controls-key="space">Space</span>
+        </div>
       </div>
     </section>
     <section id="work" class="work py-4">
