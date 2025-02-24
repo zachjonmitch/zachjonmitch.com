@@ -3,23 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zach Mitchell - Frontend Engineer</title>
+  <meta name="description" content="I build unique and engaging experiences that deliver results.">
+  <title>Zach Mitchell | Frontend Engineer</title>
   <link rel="icon" type="image/png" sizes="32x32" href="/dist/img/zm-favicon.ico">
   <link rel="preload" href="https://zachjonmitch.com/dist/fonts/PraterSans-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
   <link rel="preload" href="https://zachjonmitch.com/dist/fonts/PixelifySans-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-  <!-- <link rel="preload" as="image" href="/dist/img/screenshot-g2-sell.jpg" type="image/jpeg">
+  <link rel="preload" as="image" href="/dist/img/screenshot-g2-sell.jpg" type="image/jpeg">
   <link rel="preload" as="image" href="/dist/img/screenshot-rmr.jpg" type="image/jpeg">
   <link rel="preload" as="image" href="dist/img/screenshot-g2-reach.jpg" type="image/jpeg">
-  <link rel="preload" as="image" href="dist/img/screenshot-rrfc.jpg" type="image/jpeg"> -->
+  <link rel="preload" as="image" href="dist/img/screenshot-rrfc.jpg" type="image/jpeg">
   <link rel="stylesheet" href="/dist/css/styles.min.css">
 </head>
 <body>
-  <canvas class="canvas-bg" data-ui-canvas-bg style="position:fixed;"></canvas>
-  <header class="page-header">
+  <canvas class="canvas-bg z-0" data-ui-canvas-bg style="position:fixed;"></canvas>
+  <header class="page-header z-3">
     <nav class="zm-navbar">
       <div class="zm-navbar__grid">
         <div class="zm-navbar__brand">
-          <a class="zm-navbar__brand-link" href="#info">
+          <a class="zm-navbar__brand-link" href="#hero">
             <img class="zm-navbar__brand-headshot d-block" src="dist/img/headshot-zm.webp" alt="Zach Mitchell Headshot" width="42">
           </a>
         </div>
@@ -32,16 +33,23 @@
           <div class="zm-navbar__primary-menu">
             <ul class="zm-navbar__list">
               <li class="zm-navbar__item">
-                <!-- <a class="zm-navbar__link" data-zm-text-reveal="Info" data-zm-text-reveal-mode="mobile" href="#info">Info</a> -->
-                <a class="zm-navbar__link" href="#info" data-zm-text-reveal="Info" data-zm-text-reveal-mobile="Info" data-zm-text-reveal-mode="mobile" data-pause>Info</a>
+                <a class="zm-navbar__link" href="#hero" 
+                   data-ui-navbar-link data-zm-text-reveal="Info" 
+                   data-zm-text-reveal-mobile="Info" 
+                   data-zm-text-reveal-mode="mobile" 
+                   data-pause>Info</a>
               </li>
               <li class="zm-navbar__item">
-                <!-- <a class="zm-navbar__link" data-zm-text-reveal="Work & Tools" data-zm-text-reveal-mode="mobile" href="#work">Work & Tools</a> -->
-                <a class="zm-navbar__link" href="#work" data-zm-text-reveal="Work & Tools" data-zm-text-reveal-mobile="Work & Tools" data-zm-text-reveal-mode="mobile" data-pause>Work & Tools</a>
+                <a class="zm-navbar__link" href="#work" 
+                   data-ui-navbar-link data-zm-text-reveal="Work & Tools" 
+                   data-zm-text-reveal-mobile="Work & Tools" 
+                   data-zm-text-reveal-mode="mobile" 
+                   data-pause>Work & Tools</a>
               </li>
             </ul>
           </div>
           <div class="zm-navbar__secondary-menu">
+            <h4 class="zm-navbar__mobile-label text-green d-lg-none">Say Hello</h4>
             <div class="zm-socials">
               <ul class="zm-socials__list list-reset">
                 <li class="zm-socials__item">
@@ -65,6 +73,13 @@
                     </svg>
                   </a>
                 </li>
+                <li class="zm-socials__item d-lg-none">
+                  <a class="zm-socials__button zm-button-circle zm-button-circle--green zm-button-circle--3d" href="tel:1-801-234-0945">
+                    <svg class="zm-socials__icon" fill="currentColor">
+                      <use xlink:href="/dist/img/icons/icons-sprite.svg#icon-email"></use>
+                    </svg>
+                  </a>
+                </li>
               </ul>                       
             </div>
             <a class="zm-navbar__button d-none d-lg-flex" data-zm-text-scramble href="mailto:zachjonmitch@gmail.com">
@@ -84,9 +99,9 @@
     </nav>
   </header>
   <main class="page-content">
-    <section id="info" class="hero">
+    <section id="hero" class="hero">
       <div class="hero__container zm-container zm-container--expand">
-        <header class="hero__header">
+        <header class="hero__header" data-parallax data-parallax-speed-y=".18">
           <h1 class="hero__name h2 mt-3 mb-3" aria-label="Zach Mitchell" aria-hidden="true">
             <span class="hero__first-name d-block" 
                   data-zm-text-reveal="Zachary" 
@@ -104,7 +119,7 @@
                   data-zm-text-reveal-hover 
                   aria-hidden="true"></span>
           </h1>
-          <h2 class="hero__job-title text-body mb0" 
+          <h2 class="hero__job-title text-body mb0 z-2" 
               data-zm-text-typewriter="&lt;FrontendEngineer/&gt;" 
               data-pause 
               aria-label="Frontend Engineer"></h2>
@@ -116,6 +131,7 @@
         <div class="work__grid">
           <div class="work__row">
             <div class="work-box work-box--g2-sell">
+              <a class="work-box__link z-2" href="https://sell.g2.com/" target="_blank"></a>
               <div class="zm-toolbar">
                 <div class="zm-toolbar__dots">
                   <div class="zm-toolbar__dot"></div>
@@ -142,6 +158,7 @@
               </div>
             </div>
             <div class="work-box work-box--rmr">
+              <a class="work-box__link z-2" href="https://www.rmrbullets.com/" target="_blank"></a>
               <div class="zm-toolbar">
                 <div class="zm-toolbar__dots">
                   <div class="zm-toolbar__dot"></div>
@@ -170,6 +187,7 @@
           </div>
           <div class="work__row">
             <div class="work-box work-box--rrfc">
+              <a class="work-box__link z-2" href="https://rrfedu.com/weekly-report/" target="_blank"></a>
               <div class="zm-toolbar">
                 <div class="zm-toolbar__dots">
                   <div class="zm-toolbar__dot"></div>
@@ -196,6 +214,7 @@
               </div>
             </div>
             <div class="work-box work-box--g2-reach">
+              <a class="work-box__link z-2" href="https://reach.g2.com/" target="_blank"></a>
               <div class="zm-toolbar">
                 <div class="zm-toolbar__dots">
                   <div class="zm-toolbar__dot"></div>

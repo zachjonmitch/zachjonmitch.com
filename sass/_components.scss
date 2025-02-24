@@ -112,6 +112,10 @@
   padding: 0 15px;
   display: flex;
   align-items: center;
+
+  @include mixins.max-width(lg) {
+    padding: 0 10px;
+  }
 }
 
 .zm-navbar__logo {
@@ -143,6 +147,11 @@
 
       .zm-navbar__secondary-menu {
         margin-top: auto;
+        margin-left: 0;
+        padding: 60px 15px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
       }
 
       .zm-navbar__list {
@@ -157,10 +166,34 @@
       }
 
       .zm-navbar__link {
-        // font-family: variables.$font-primary;
+        font-family: variables.$font-primary;
         font-size: 45px;
-        font-weight: 400;
+        font-weight: 700;
         text-transform: uppercase;
+        padding: 0;
+      }
+
+      .zm-navbar__link::before {
+        display: none;
+      }
+
+      .zm-navbar__mobile-label {
+        font-family: variables.$font-secondary;
+        font-weight: 700;
+        font-size: 28px;
+        text-transform: uppercase;
+        margin-bottom: 0;
+        font-weight: 400;
+      }
+
+      .zm-socials__button {
+        width: 45px;
+        height: 45px;
+      }
+
+      .zm-socials__icon {
+        width: 18px;
+        height: 18px;
       }
     }
   }
@@ -289,18 +322,16 @@
   width: 45px;
   height: 45px;
   margin-left: auto;
-  margin-right: -7px;
   border: 0;
   box-shadow: inset 0px 0px 5px #3e3e3e;
+  color: black;
 }
 
 .zm-navbar__toggle-icon {
   width: 20px;
+  height: 20px;
+  color: black;
   display: block;
-}
-
-.zm-navbar__toggle-icon path {
-  fill: black;
 }
 
 .zm-toolbar {
@@ -367,7 +398,8 @@
 }
 
 .zm-socials__icon {
-  width: 14px;
+  width: 15px;
+  height: 15px;
   display: block;
   position: relative;
   color: variables.$color-green;

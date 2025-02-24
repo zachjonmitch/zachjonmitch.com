@@ -54,6 +54,50 @@ button {
   background: transparent;
 }
 
+.z-n1 {
+  z-index: -1;
+}
+
+.z-0 {
+  z-index: 0;
+}
+
+.z-1 {
+  z-index: 1;
+}
+
+.z-2 {
+  z-index: 2;
+}
+
+.z-3 {
+  z-index: 3;
+}
+
+.z-4 {
+  z-index: 4;
+}
+
+.z-5 {
+  z-index: 5;
+}
+
+.z-6 {
+  z-index: 6;
+}
+
+.z-7 {
+  z-index: 7;
+}
+
+.z-8 {
+  z-index: 8;
+}
+
+.z-9 {
+  z-index: 9;
+}
+
 .canvas-bg {
   position: fixed;
   width: 100vw;
@@ -61,7 +105,6 @@ button {
   display: block;
   top: 0;
   left: 0;
-  z-index: 0;
   cursor: variables.$cursor-inverse-grab;
   contain: strict;
 
@@ -71,19 +114,17 @@ button {
 }
 
 #game-canvas {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 99999;
 }
 
 .page-header {
   position: absolute;
   top: 0;
   width: 100%;
-  z-index: 9;
 }
 
 .hero {
@@ -92,36 +133,13 @@ button {
   align-items: center;
 }
 
-// .hero__card {
-//   border-radius: 53px;
-//   border-radius: 25px;
-//   padding: 50px;
-//   background-size: 1500px;
-//   background-repeat: no-repeat;
-//   background-position: top left;
-//   position: relative;
-
-//   @include mixins.max-width(sm) {
-//     width: calc(100% - 30px);
-//     border-radius: 30px;
-//     padding: 50px 15px;
-//     margin-top: -30px;
-//   }
-// }
-
 .hero__header {
-  // margin-bottom: -50px;
   text-align: center;
 
   @include mixins.max-width(sm) {
     text-align: left;
+    margin-top: -30px;
   }
-}
-
-.hero__card-inner {
-  position: relative;
-  z-index: 2;
-  text-align: center;
 }
 
 .hero__name {
@@ -156,7 +174,6 @@ button {
   font-size: 35px;
   color: variables.$color-green;
   position: relative;
-  z-index: 0;
   display: inline-block;
   line-height: 1;
   margin-left: -5px;
@@ -223,7 +240,7 @@ button {
 
   // When the row is hovered, set all work boxes to a fixed width…
   &:hover .work-box {
-    flex: 0 0 530px;
+    flex: 0 0 550px;
   }
   // …except for the hovered box which expands to fill the remaining space.
   &:hover .work-box:hover {
@@ -236,6 +253,7 @@ button {
   border-radius: 10px;
   position: relative;
   transition: flex 0.30s ease-in-out, transform 0.4s ease-in-out;
+  cursor: variables.$cursor-pointer;
 }
 
 .work-box::after {
@@ -246,16 +264,30 @@ button {
   top: 0;
   left: 0;
   opacity: .5;
-  transition: .6s ease;
+  transition: width .6s ease;
 }
 
 .work-box:hover::after {
   opacity: 0;
 }
 
+.work-box:hover .work-info__title,
+.work-box:hover .work-info__item {
+  color: variables.$color-green;
+}
+
+.work-box__link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .work-box__carousel {
   width: 100%;
-  height: 530px;
+  height: 550px;
   overflow: hidden;
   position: relative;
   border-radius: 10px;
@@ -274,7 +306,7 @@ button {
   left: 0;
   width: 100%;
   will-change: transform;
-  transform: translateZ(0);
+  transform: translate3d(0, 0, 0);
   display: flex;
   flex-direction: column;
   backface-visibility: hidden;

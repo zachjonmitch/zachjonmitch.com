@@ -2,6 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   initSiteBackground();
+  initParallax();
   // initAsteroids();
   initMobileMenu();
   initAnchorScroll();
@@ -9,10 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initTextTypewriters();
   initTextScrambles();
   initWorkCarousels();
-
-  window.addEventListener('resize', () => {
-    resetMobileMenu();
-  });
 });
 
 
@@ -39,7 +36,6 @@ function pauseController() {
       register: (element, type, onPause, onResume) => {
         if (!elements.has(element)) {
           elements.set(element, { type, pause: onPause, resume: onResume });
-          console.log('Registering element:', element, 'Type:', type);
           trackedElements.add(element);
 
           if (element.hasAttribute('data-pause')) {
@@ -85,6 +81,62 @@ function pauseController() {
   return pauseController.instance;
 }
 
+
+/**
+ * Manages window scroll events.
+ * 
+ * @returns {{
+*  subscribe: (callback: Function),
+*  unsubscribe: (callback: Function)
+* }}
+*/
+function windowScrollController() {
+  if (!windowScrollController.instance) {
+  const subscribers = new Set();
+
+  windowScrollController.instance = {
+    subscribe: (callback) => {
+      subscribers.add(callback);
+    },
+    unsubscribe: (callback) => {
+      subscribers.delete(callback);
+    }
+  }
+
+  window.addEventListener('scroll', (event) => {
+    subscribers.forEach(callback => {
+      callback(event);
+    });
+  });
+  }
+
+  return windowScrollController.instance;
+}
+
+/**
+ * Manages window resize events.
+ * 
+ * @returns {{
+*  subscribe: (callback: Function),
+*  unsubscribe: (callback: Function)
+* }}
+*/
+function windowResizeController() {
+ if (!windowResizeController.instance) {
+   const subscribers = new Set();
+
+   windowResizeController.instance = {
+     subscribe: (callback) => subscribers.add(callback),
+     unsubscribe: (callback) => subscribers.delete(callback)
+   };
+
+   window.addEventListener('resize', (event) => {
+     subscribers.forEach(callback => callback(event));
+   });
+ }
+
+ return windowResizeController.instance;
+}
 
 
 /**
@@ -147,6 +199,75 @@ function decodeHTML(html) {
   var txt = document.createElement("textarea");
   txt.innerHTML = html;
   return txt.value;
+}
+
+/**
+ * Linearly interpolates between two values.
+ * 
+ * @param {number} start
+ * @param {number} end
+ * @param {number} factor (0 = no change, 1 = full change).
+ * @returns {number}
+ */
+function lerp(start, end, factor) {
+  return start + (end - start) * factor;
+}
+
+/**
+ * Initializes the parallax scrolling effect for elements with the `data-parallax` attribute.
+ * 
+ * - Moves elements horizontally and/or vertically based on scroll position.
+ * - Sets optional start/stop points.
+ */
+function initParallax() {
+  const parallaxElements = document.querySelectorAll('[data-parallax]');
+  let lastScrollY = window.scrollY;
+  let ticking = false;
+
+  function updateParallax() {
+    const scrollY = window.scrollY;
+
+    if (scrollY === lastScrollY) {
+      ticking = false;
+      requestAnimationFrame(updateParallax);
+      return;
+    }
+
+    lastScrollY = scrollY;
+
+    parallaxElements.forEach(element => {
+      const speedX = parseFloat(element.dataset.parallaxSpeedX) || 0;
+      const speedY = parseFloat(element.dataset.parallaxSpeedY) || 0;
+
+      const hasStartX = element.hasAttribute('data-parallax-start-x');
+      const hasStopX = element.hasAttribute('data-parallax-stop-x');
+      const hasStartY = element.hasAttribute('data-parallax-start-y');
+      const hasStopY = element.hasAttribute('data-parallax-stop-y');
+
+      const startX = hasStartX ? parseFloat(element.dataset.parallaxStartX) : 0;
+      const stopX = hasStopX ? parseFloat(element.dataset.parallaxStopX) : Infinity;
+      const startY = hasStartY ? parseFloat(element.dataset.parallaxStartY) : 0;
+      const stopY = hasStopY ? parseFloat(element.dataset.parallaxStopY) : Infinity;
+
+      let moveX = startX + speedX * scrollY;
+      let moveY = startY + speedY * scrollY;
+
+      if (hasStartX && hasStopX) {
+        moveX = Math.min(Math.max(moveX, Math.min(startX, stopX)), Math.max(startX, stopX));
+      }
+      if (hasStartY && hasStopY) {
+        moveY = Math.min(Math.max(moveY, Math.min(startY, stopY)), Math.max(startY, stopY));
+      }
+
+      element.style.transform = `translate3d(${moveX}px, ${moveY}px, 0)`;
+    });
+
+    ticking = false;
+    requestAnimationFrame(updateParallax);
+  }
+
+  // Start the loop
+  requestAnimationFrame(updateParallax);
 }
 
 
@@ -273,10 +394,19 @@ function initMobileMenu() {
   const navbarToggle = document.querySelector('[data-ui-navbar-toggle]');
   const navbarCollapse = document.querySelector('[data-ui-navbar-collapse]');
   const navbarCloseButton = document.querySelector('[data-ui-navbar-close-button]');
+  const navbarLinks = document.querySelectorAll('[data-ui-navbar-link]');
+  
   const pauseControl = pauseController();
+  const resizeControl = windowResizeController();
+
+  resizeControl.subscribe(resetMobileMenu);
 
   navbarToggle.addEventListener('click', handleClickNavbarToggle);
   navbarCloseButton.addEventListener('click', (handleClickNavbarCloseButton));
+
+  navbarLinks.forEach(link => {
+    link.addEventListener('click', resetMobileMenu);
+  });
 
   function handleClickNavbarToggle() {
     body.classList.add('mobile-menu-open');
@@ -347,7 +477,7 @@ function initWorkCarousels() {
 
       function animate() {
         if (!isAnimating) return;
-        yOffset -= speed / 5000;
+        yOffset -= speed / 7000;
         if (yOffset <= -50) yOffset = 0;
         track.style.transform = `translate3d(0, ${yOffset}%, 0)`;
         animationFrame = requestAnimationFrame(animate);
@@ -438,8 +568,6 @@ function initTextReveals() {
 
     if (!mediaQuery.matches && isMobileOnly) return;
 
-    console.log('iserting chars', element);
-
     let text = '';
   
     if (element.hasAttribute('data-zm-text-reveal-mobile') && mediaQuery.matches) {
@@ -462,7 +590,7 @@ function initTextReveals() {
       if (char === ' ') {
         element.insertAdjacentHTML('beforeend', `<span class="zm-reveal-char__space">&nbsp;</span>`);
       } else {
-        const html = `<span class='zm-reveal-char__wrap' data-ui-reveal-char-wrap aria-hidden='true'>
+        const html = `<span class='zm-reveal-char__wrap z-2' data-ui-reveal-char-wrap aria-hidden='true'>
                         <span class='zm-reveal-char zm-reveal-char--primary' data-ui-reveal-char>${char}</span>
                         <span class='zm-reveal-char zm-reveal-char--alt' data-ui-reveal-char-alt>${char}</span>
                       </span>`;
@@ -515,7 +643,6 @@ function initTextReveals() {
 
     if (element.hasAttribute('data-pause')) {
       pauseControl.register(element, 'text-reveal', pause, resume);
-      console.log(pauseControl);
     }
     startAnimations();
   }
