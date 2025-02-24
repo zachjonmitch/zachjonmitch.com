@@ -4,13 +4,8 @@
   "description": "Web development portfolio with contact info and work samples",
   "main": "js/index.js",
   "scripts": {
-    "build": "start npm run build-pug && start npm run build-scss && start npm run build-js",
-    "deploy": "git push -u origin master && git subtree push --prefix dist origin gh-pages",
-    "build-pug": "pug --watch index.pug",
     "watch-sass": "sass --watch sass/main.scss:dist/css/styles.min.css --style compressed",
-    "build-js": "onchange \"js/*.js\" -- npm run uglify",
-    "uglify": "uglifyjs js/*.js -m -c -o dist/js/index.min.js",
-    "imagemin": "imagemin assets/images/* --out-dir=dist/img"
+    "build-js": "npx esbuild js/index.js --bundle --minify --outfile=dist/js/index.min.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +21,6 @@
     "sass": "^1.32.8"
   },
   "devDependencies": {
-    "uglify-js": "^3.19.3"
+    "esbuild": "^0.25.0"
   }
 }

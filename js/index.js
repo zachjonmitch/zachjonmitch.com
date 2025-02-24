@@ -1,9 +1,9 @@
-// import { initAsteroids } from "./asteroids.js";
+import { initAsteroids } from "./asteroids.js";
 
 document.addEventListener('DOMContentLoaded', () => {
   initSiteBackground();
   initParallax();
-  // initAsteroids();
+  initAsteroids();
   initMobileMenu();
   initAnchorScroll();
   initTextReveals();
@@ -296,26 +296,30 @@ function initSiteBackground() {
 
   let velocityX = -SPEED;
   let velocityY = 0;
+  let lastTime = performance.now();
 
   function resizeCanvas() {
     const pixelRatio = window.devicePixelRatio || 1;
-  
+
     canvas.width = window.innerWidth * pixelRatio;
     canvas.height = window.innerHeight * pixelRatio;
     canvas.style.width = '100vw';
     canvas.style.height = '100vh';
-  
+
     ctx.scale(pixelRatio, pixelRatio);
-  
+
     patternHeight = window.innerHeight * 0.3;
     ctx.imageSmoothingEnabled = false;
   }
 
-  function draw() {
+  function draw(currentTime) {
     if (!patternImage.complete) {
       requestAnimationFrame(draw);
       return;
     }
+
+    const deltaTime = (currentTime - lastTime) / 16.67;
+    lastTime = currentTime;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -326,8 +330,8 @@ function initSiteBackground() {
     }
 
     if (!isDragging) {
-      offsetX += velocityX;
-      offsetY += velocityY;
+      offsetX += velocityX * deltaTime;
+      offsetY += velocityY * deltaTime;
 
       velocityX *= FRICTION;
       velocityY *= FRICTION;
@@ -381,7 +385,7 @@ function initSiteBackground() {
   });
 
   resizeCanvas();
-  patternImage.onload = draw;
+  patternImage.onload = () => requestAnimationFrame(draw);
   window.addEventListener('resize', resizeCanvas);
 }
 
@@ -472,20 +476,28 @@ function initWorkCarousels() {
     tracks.forEach(track => {
       const speed = track.dataset.trackSpeed ? parseFloat(track.dataset.trackSpeed) : 100;
       let yOffset = 0;
+      let lastTime = performance.now();
       let animationFrame = null;
       let isAnimating = false;
 
-      function animate() {
+      function animate(time) {
         if (!isAnimating) return;
-        yOffset -= speed / 7000;
+
+        const deltaTime = time - lastTime;
+        lastTime = time;
+
+        yOffset -= (speed / 7000) * (deltaTime / 16.67);
+
         if (yOffset <= -50) yOffset = 0;
         track.style.transform = `translate3d(0, ${yOffset}%, 0)`;
+
         animationFrame = requestAnimationFrame(animate);
       }
 
       function startAnimation() {
         if (!isAnimating) {
           isAnimating = true;
+          lastTime = performance.now();
           requestAnimationFrame(animate);
         }
       }
@@ -509,7 +521,9 @@ function initWorkCarousels() {
       updateAnimationState();
       mobileMediaQuery.addEventListener("change", updateAnimationState);
 
-      track.closest(".work-box").addEventListener("mouseenter", () => {
+      const workBox = track.closest(".work-box");
+
+      workBox.addEventListener("mouseenter", () => {
         if (!mobileMediaQuery.matches) {
           tracks.forEach(otherTrack => {
             if (otherTrack !== track) {
@@ -523,7 +537,7 @@ function initWorkCarousels() {
         }
       });
 
-      track.closest(".work-box").addEventListener("mouseleave", () => {
+      workBox.addEventListener("mouseleave", () => {
         if (!mobileMediaQuery.matches) {
           stopAnimation();
         }

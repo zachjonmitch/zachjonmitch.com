@@ -1,5 +1,5 @@
 export function initAsteroids() {
-
+  console.log('testing');
 }
 
 // function initAsteroids() {
