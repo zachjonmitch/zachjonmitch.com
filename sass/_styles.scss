@@ -212,8 +212,8 @@ button {
 
 .hero__name {
   text-transform: uppercase;
-  font-size: 150px;
-  line-height: 1.05;
+  // font-size: 150px;
+  line-height: 0;
   margin-bottom: 60px;
   color: variables.$color-green;
 
@@ -378,11 +378,16 @@ button {
   display: flex;
   flex-direction: column;
   backface-visibility: hidden;
-  contain: layout paint;
+  contain: content;
 }
 
 .work-box__slide {
   transition: filter .4s ease-in-out;
+  transform: translate3d(0, 0, 0);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  background-attachment: fixed;
+  image-rendering: -webkit-optimize-contrast;
 
   @include mixins.min-width(lg) {
     filter: grayscale(100%);

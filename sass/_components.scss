@@ -406,50 +406,33 @@
   color: variables.$color-green;
 }
 
+.hero__first-name,
+.hero__first-middle,
+.hero__last-name {
+  height: auto;
+  line-height: 1;
+}
+
 .zm-reveal-char__wrap {
   display: inline-block;
   overflow: hidden;
   position: relative;
   cursor: variables.$cursor-default;
+  line-height: .9;
   // pointer-events: auto;
 }
 
 .zm-reveal-char {
   display: inline-block;
   transform: translateY(100%);
-  // transition: .3s cubic-bezier(.68,-.55,.265,1.55);
+  font-size: 180px;
 }
-
-// .zm-reveal-char-wrap--active .zm-reveal-char {
-//   transform: translateY(0);
-//   visibility: visible;
-// }
-
-// .zm-reveal-char-wrap--active .zm-reveal-char-alt {
-//   visibility: visible;
-// }
 
 .zm-reveal-char--alt {
   position: absolute;
   left: 0;
   top: 0;
-  // transition: .35s cubic-bezier(.68,-.55,.265,1.55);
 }
-
-/*.zm-reveal-char-wrap:hover .zm-reveal-char {
-  transform: translateY(-100%);
-}
-
-.zm-reveal-char-wrap:hover .zm-reveal-char-alt {
-  transform: translateY(0);
-  transition: .4s cubic-bezier(.68,-.55,.265,1.55);
-}*/
-
-// .zm-reveal-char,
-// .zm-reveal-char-alt {
-//   line-height: 1;
-//   visibility: hidden;
-// }
 
 .zm-typewriter {
   position: relative;

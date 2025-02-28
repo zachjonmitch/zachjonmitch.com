@@ -8,7 +8,7 @@ import { observeElements } from "./utils/observe-elements.js";
 document.addEventListener('DOMContentLoaded', () => {
   initSiteBackground();
   initParallax();
-  // initAsteroids();
+  initAsteroids();
   initGameKeys();
   initMobileMenu();
   initAnchorScroll();
