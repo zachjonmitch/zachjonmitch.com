@@ -441,13 +441,15 @@ function initTextReveals() {
       if (char === ' ') {
         element.insertAdjacentHTML('beforeend', `<span class="zm-reveal-char__space">&nbsp;</span>`);
       } else {
-        const html = `<span class='zm-reveal-char__wrap z-2' data-ui-reveal-char-wrap aria-hidden='true'>
+        const html = `<span class='zm-reveal-char__wrap' data-ui-reveal-char-wrap data-parallax data-parallax-speed-y=".13" aria-hidden='true'>
                         <span class='zm-reveal-char zm-reveal-char--primary' data-ui-reveal-char>${char}</span>
                         <span class='zm-reveal-char zm-reveal-char--alt' data-ui-reveal-char-alt>${char}</span>
                       </span>`;
         element.insertAdjacentHTML('beforeend', html);
       }
     });
+
+    initParallax();
   }
 
   function revealText(element) {

@@ -6,7 +6,8 @@
   <meta name="description" content="I build unique and engaging experiences that deliver results.">
   <title>Zach Mitchell | Frontend Engineer</title>
   <link rel="icon" type="image/png" sizes="32x32" href="/dist/img/zm-favicon.ico">
-  <link rel="preload" href="https://zachjonmitch.com/dist/fonts/PraterSans-Bold.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://zachjonmitch.com/dist/fonts/PuffinArcade-Chrome.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="https://zachjonmitch.com/dist/fonts/PuffinArcade-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
   <link rel="preload" href="https://zachjonmitch.com/dist/fonts/PixelifySans-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
   <link rel="preload" as="image" href="/dist/img/screenshot-g2-sell.jpg" type="image/jpeg">
   <link rel="preload" as="image" href="/dist/img/screenshot-rmr.jpg" type="image/jpeg">
@@ -15,8 +16,8 @@
   <link rel="stylesheet" href="/dist/css/styles.min.css">
 </head>
 <body>
-  <canvas class="canvas-bg z-0" data-ui-canvas-bg style="position: fixed;"></canvas>
-  <header class="page-header z-3">
+  <canvas class="canvas-bg" data-ui-canvas-bg style="position: fixed;"></canvas>
+  <header class="page-header">
     <nav class="zm-navbar">
       <div class="zm-navbar__grid">
         <div class="zm-navbar__brand">
@@ -34,17 +35,11 @@
             <ul class="zm-navbar__list">
               <li class="zm-navbar__item">
                 <a class="zm-navbar__link" href="#hero" 
-                   data-ui-navbar-link data-zm-text-reveal="Info" 
-                   data-zm-text-reveal-mobile="Info" 
-                   data-zm-text-reveal-mode="mobile" 
-                   data-pause>Info</a>
+                   data-ui-navbar-link>Info</a>
               </li>
               <li class="zm-navbar__item">
                 <a class="zm-navbar__link" href="#work" 
-                   data-ui-navbar-link data-zm-text-reveal="Work & Tools" 
-                   data-zm-text-reveal-mobile="Work & Tools" 
-                   data-zm-text-reveal-mode="mobile" 
-                   data-pause>Work & Tools</a>
+                   data-ui-navbar-link>Work & Tools</a>
               </li>
             </ul>
           </div>
@@ -100,10 +95,10 @@
   </header>
   <main class="page-content">
     <section id="hero" class="hero">
-      <canvas class="canvas-game z-1" data-ui-canvas-game style="position: absolute;"></canvas>
+      <canvas class="canvas-game d-none d-lg-block" data-ui-canvas-game style="position: absolute;"></canvas>
       <div class="hero__container zm-container zm-container--expand">
-        <header class="hero__header" data-parallax data-parallax-speed-y=".12">
-          <h1 class="hero__name h2 mt-3 mb-3" aria-label="Zach Mitchell" aria-hidden="true">
+        <header class="hero__header">
+          <h1 class="hero__name h2 mt-3 mb-4" aria-label="Zach Mitchell" aria-hidden="true">
             <span class="hero__first-name d-block" 
                   data-zm-text-reveal="Zachary" 
                   data-zm-text-reveal-mobile="Zach" 
@@ -120,9 +115,11 @@
                   data-zm-text-reveal-hover 
                   aria-hidden="true"></span>
           </h1>
-          <h2 class="hero__job-title text-body mb0 z-2" 
+          <h2 class="hero__job-title text-body mb0" 
               data-zm-text-typewriter="&lt;FrontendEngineer/&gt;" 
-              data-pause 
+              data-pause
+              data-parallax 
+              data-parallax-speed-y=".13"
               aria-label="Frontend Engineer"></h2>
         </header>
       </div>
@@ -141,7 +138,7 @@
         <div class="work__grid">
           <div class="work__row">
             <div class="work-box work-box--g2-sell">
-              <a class="work-box__link z-2" href="https://sell.g2.com/" target="_blank"></a>
+              <a class="work-box__link" href="https://sell.g2.com/" target="_blank"></a>
               <div class="zm-toolbar">
                 <div class="zm-toolbar__dots">
                   <div class="zm-toolbar__dot"></div>
@@ -168,7 +165,7 @@
               </div>
             </div>
             <div class="work-box work-box--rmr">
-              <a class="work-box__link z-2" href="https://www.rmrbullets.com/" target="_blank"></a>
+              <a class="work-box__link" href="https://www.rmrbullets.com/" target="_blank"></a>
               <div class="zm-toolbar">
                 <div class="zm-toolbar__dots">
                   <div class="zm-toolbar__dot"></div>
@@ -197,7 +194,7 @@
           </div>
           <div class="work__row">
             <div class="work-box work-box--rrfc">
-              <a class="work-box__link z-2" href="https://rrfedu.com/weekly-report/" target="_blank"></a>
+              <a class="work-box__link" href="https://rrfedu.com/weekly-report/" target="_blank"></a>
               <div class="zm-toolbar">
                 <div class="zm-toolbar__dots">
                   <div class="zm-toolbar__dot"></div>
@@ -224,7 +221,7 @@
               </div>
             </div>
             <div class="work-box work-box--g2-reach">
-              <a class="work-box__link z-2" href="https://reach.g2.com/" target="_blank"></a>
+              <a class="work-box__link" href="https://reach.g2.com/" target="_blank"></a>
               <div class="zm-toolbar">
                 <div class="zm-toolbar__dots">
                   <div class="zm-toolbar__dot"></div>

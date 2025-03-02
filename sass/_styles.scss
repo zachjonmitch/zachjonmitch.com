@@ -54,49 +54,53 @@ button {
   background: transparent;
 }
 
-.z-n1 {
-  z-index: -1;
-}
+// .z-n1 {
+//   z-index: -1;
+// }
 
-.z-0 {
-  z-index: 0;
-}
+// .z-0 {
+//   z-index: 0;
+// }
 
-.z-1 {
-  z-index: 1;
-}
+// .z-1 {
+//   z-index: 1;
+// }
 
-.z-2 {
-  z-index: 2;
-}
+// .z-2 {
+//   z-index: 2;
+// }
 
-.z-3 {
-  z-index: 3;
-}
+// .z-3 {
+//   z-index: 3;
+// }
 
-.z-4 {
-  z-index: 4;
-}
+// .z-4 {
+//   z-index: 4;
+// }
 
-.z-5 {
-  z-index: 5;
-}
+// .z-5 {
+//   z-index: 5;
+// }
 
-.z-6 {
-  z-index: 6;
-}
+// .z-6 {
+//   z-index: 6;
+// }
 
-.z-7 {
-  z-index: 7;
-}
+// .z-7 {
+//   z-index: 7;
+// }
 
-.z-8 {
-  z-index: 8;
-}
+// .z-8 {
+//   z-index: 8;
+// }
 
-.z-9 {
-  z-index: 9;
-}
+// .z-9 {
+//   z-index: 9;
+// }
+
+// .p-relative {
+//   position: relative;
+// }
 
 .canvas-bg {
   position: fixed;
@@ -107,6 +111,7 @@ button {
   left: 0;
   cursor: variables.$cursor-inverse-grab;
   contain: strict;
+  z-index: 2;
 
   @include mixins.max-width(lg) {
     pointer-events: none;
@@ -127,12 +132,14 @@ button {
   height: 100vh;
   contain: strict;
   pointer-events: none;
+  z-index: 3;
 }
 
 .game-controls {
   position: absolute;
   bottom: 15px;
   right: 15px;
+  z-index: 4;
 }
 
 .game-controls__grid {
@@ -154,10 +161,10 @@ button {
   justify-content: center;
   width: 38px;
   height: 38px;
-  transition: .1s ease-in-out;
   font-weight: 600;
   font-size: 16px;
   text-transform: uppercase;
+  background-color: black;
 }
 
 .game-controls__key--active {
@@ -203,6 +210,8 @@ button {
 
 .hero__header {
   text-align: center;
+  position: relative;
+  z-index: auto;
 
   @include mixins.max-width(sm) {
     text-align: left;
@@ -212,21 +221,24 @@ button {
 
 .hero__name {
   text-transform: uppercase;
-  // font-size: 150px;
   line-height: 0;
   margin-bottom: 60px;
   color: variables.$color-green;
+}
 
+.hero .zm-reveal-char {
+  font-size: 180px;
+  
   @include mixins.max-width(lg) {
-    font-size: 153px;
+    font-size: 163px;
   }
 
   @include mixins.max-width(md) {
-    font-size: 117px;
+    font-size: 130px;
   }
 
   @include mixins.max-width(sm) {
-    font-size: clamp(100px, 25vw + 1rem, 140px);
+    font-size: clamp(100px, 29vw + 1rem, 160px);
   }
 }
 
@@ -246,9 +258,12 @@ button {
   line-height: 1;
   margin-left: -5px;
   margin-bottom: 0;
+  z-index: 3;
+  will-change: transform;
+  transform: translate3d(0,0,0);
 
   @include mixins.max-width(sm) {
-    font-size: 28px;
+    font-size: 26px;
     margin-left: 0;
   }
 }
@@ -282,10 +297,6 @@ button {
 
 .work__grid {
   overflow-anchor: none;
-
-  // @include mixins.min-width(lg) {
-  //   padding: 0 10px;
-  // }
 }
 
 .work__row {
@@ -293,7 +304,6 @@ button {
   gap: 40px;
   margin-bottom: 40px;
   flex-direction: column;
-  // transition: all .1s ease-in-out;
 
   @include mixins.min-width(lg) {
     gap: 15px;
@@ -306,37 +316,26 @@ button {
     margin-bottom: 20px;
   }
 
-  // When the row is hovered, set all work boxes to a fixed width…
   &:hover .work-box {
-    flex: 0 0 550px;
+    flex-grow: 0;
+    flex-basis: 550px;
   }
-  // …except for the hovered box which expands to fill the remaining space.
+
   &:hover .work-box:hover {
-    flex: 1;
+    flex-grow: 1;
+    flex-basis: calc(100% - 550px - 15px);
   }
 }
 
 .work-box {
-  flex: 1; // default: boxes share the space equally
+  flex: 1;
+  flex-basis: calc(50% - 15px);
+  // min-width: 550px;
   border-radius: 10px;
   position: relative;
-  transition: flex 0.30s ease-in-out, transform 0.4s ease-in-out;
+  transition: flex-basis 0.3s ease-in-out, transform 0.4s ease-in-out;
   cursor: variables.$cursor-pointer;
-}
-
-.work-box::after {
-  background-color: black;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: .5;
-  transition: width .6s ease;
-}
-
-.work-box:hover::after {
-  opacity: 0;
+  z-index: 3;
 }
 
 .work-box:hover .work-info__title,
@@ -351,6 +350,7 @@ button {
   display: block;
   width: 100%;
   height: 100%;
+  z-index: 3;
 }
 
 .work-box__carousel {
@@ -464,7 +464,7 @@ button {
   color: rgba(255, 255, 255, .5);
   font-family: variables.$font-secondary;
   font-weight: 400;
-  transition: .2s ease-in-out;
+  transition: color .2s ease-in-out;
   line-height: 1.1;
 
   @include mixins.max-width(sm) {
@@ -492,7 +492,7 @@ button {
   text-transform: uppercase;
   position: relative;
   line-height: 1.1;
-  transition: .2s ease-in-out;
+  transition: color .2s ease-in-out;
 }
 
 .work-info__item::after {

@@ -33,7 +33,10 @@
   justify-content: center;
   position: relative;
   background-color: #342A86;
-  transition: .2s ease-in-out;
+  transition: border .2s ease-in-out,
+              box-shadow .2s ease-in-out,
+              background-color .2s ease-in-out,
+              transform .2s ease-in-out;
 }
 
 .zm-button-circle--black {
@@ -98,11 +101,26 @@
   }
 }
 
-.zm-navbar__grid,
+.zm-navbar__grid {
+  height: 100%;
+}
+
 .zm-navbar__collapse,
 .zm-navbar__list,
 .zm-navbar__item {
-  height: 100%;
+  @include mixins.min-width(lg) {
+    height: 100%;
+  }
+}
+
+.zm-navbar__brand,
+.zm-navbar__close-button,
+.zm-navbar__link,
+.zm-socials__button,
+.zm-navbar__button,
+.zm-navbar__toggle {
+  position: relative;
+  z-index: 4;
 }
 
 .zm-navbar__grid {
@@ -126,6 +144,7 @@
 .zm-navbar__collapse {
   display: flex;
   flex-basis: 100%;
+  z-index: 5;
 
   @include mixins.max-width(lg) {
     position: fixed;
@@ -143,12 +162,13 @@
 
       .zm-navbar__primary-menu {
         margin-left: 0;
+        flex-grow: 1;
       }
 
       .zm-navbar__secondary-menu {
         margin-top: auto;
         margin-left: 0;
-        padding: 60px 15px;
+        padding: 40px 15px;
         flex-direction: column;
         align-items: flex-start;
         gap: 20px;
@@ -159,6 +179,7 @@
         gap: 10px;
         padding-left: 15px;
         margin-top: 120px;
+        height: auto;
       }
 
       .zm-navbar__item {
@@ -166,7 +187,7 @@
       }
 
       .zm-navbar__link {
-        font-family: variables.$font-primary;
+        font-family: variables.$font-primary-2;
         font-size: 45px;
         font-weight: 700;
         text-transform: uppercase;
@@ -179,11 +200,10 @@
 
       .zm-navbar__mobile-label {
         font-family: variables.$font-secondary;
-        font-weight: 700;
+        font-weight: 600;
         font-size: 28px;
         text-transform: uppercase;
         margin-bottom: 0;
-        font-weight: 400;
       }
 
       .zm-socials__button {
@@ -267,7 +287,7 @@
 
 .zm-navbar__button {
   white-space: nowrap;
-  width: 160px;
+  width: 165px;
   height: 42px;
   display: flex;
   align-items: center;
@@ -276,11 +296,11 @@
   color: variables.$color-off-white;
   border: 2px solid variables.$color-off-white;
   border-radius: 10px 10px 0;
-  font-family: variables.$font-primary;
+  font-family: variables.$font-primary-2;
   font-weight: bold;
-  transition: .2s ease-in-out;
+  transition: box-shadow .2s ease-in-out;
   text-transform: uppercase;
-  font-size: 16px;
+  font-size: 18px;
   background: variables.$gradient-metal-dark;
   color: black;
   border: 0;
@@ -289,6 +309,7 @@
   position: relative;
   padding-right: 33px;
   margin-top: 4px;
+  padding-top: 2px;
 }
 
 .zm-navbar__button-icon {
@@ -299,11 +320,6 @@
   top: 50%;
   transform: translateY(-50%);
   right: 25px;
-}
-
-.zm-navbar__button-icon path {
-  fill: black;
-  transition: .2s ease-in-out;
 }
 
 .zm-navbar__button:hover {
@@ -419,13 +435,31 @@
   position: relative;
   cursor: variables.$cursor-default;
   line-height: .9;
-  // pointer-events: auto;
+  z-index: 4;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+
+  @include mixins.max-width(sm) {
+    line-height: 1;
+  }
 }
 
 .zm-reveal-char {
   display: inline-block;
   transform: translateY(100%);
-  font-size: 180px;
+  // font-size: 180px;
+
+  // @include mixins.max-width(lg) {
+  //   font-size: 160px;
+  // }
+
+  // @include mixins.max-width(md) {
+  //   font-size: 120px;
+  // }
+
+  // @include mixins.max-width(sm) {
+  //   font-size: 125px;
+  // }
 }
 
 .zm-reveal-char--alt {
@@ -451,7 +485,6 @@
 }
 
 .zm-typewriter--blink::after {
-  // animation: blink 1.1s step-end infinite;
   display: none;
 }
 
