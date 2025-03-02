@@ -238,7 +238,7 @@ button {
   }
 
   @include mixins.max-width(sm) {
-    font-size: clamp(100px, 29vw + 1rem, 160px);
+    font-size: clamp(100px, 27vw + 1rem, 160px);
   }
 }
 
