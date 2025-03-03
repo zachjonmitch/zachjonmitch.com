@@ -8,7 +8,7 @@ export function initAsteroids() {
   const LASER_EXPLODE_DURATION = 0.1;
   const LASER_MAX = 10;
   const LASER_SPEED = 500;
-  const ROIDS_NUM = 10;
+  const ROIDS_NUM = 8;
   const ROIDS_SIZE = 100;
   const ROIDS_SPEED = 50;
   const ROIDS_VERT = 10; // Average number of vertices on each asteroid
@@ -18,6 +18,7 @@ export function initAsteroids() {
   const SHIP_INV_DURATION = 3; // Duration of ships invincibility
   const SHIP_SIZE = 35;
   const SHIP_THRUST = 5;
+  const SHIP_MAX_SPEED = 8;
   const TURN_SPEED = 360;
   const SHOW_BOUNDING = false;
   const SHOW_CENTER_DOT = false;
@@ -29,6 +30,55 @@ export function initAsteroids() {
 
   let scaledWidth = window.innerWidth / PIXEL_RATIO;
   let scaledHeight = window.innerHeight / PIXEL_RATIO;
+
+  const logoPaths = [
+    '/dist/img/logos/logo-angular.svg',
+    '/dist/img/logos/logo-js.svg',
+    '/dist/img/logos/logo-react.svg',
+    '/dist/img/logos/logo-sass.svg',
+    '/dist/img/logos/logo-ts.svg',
+    '/dist/img/logos/logo-git.svg',
+    '/dist/img/logos/logo-php.svg',
+    '/dist/img/logos/logo-ruby.svg',
+    '/dist/img/logos/logo-sql.svg'
+  ];
+
+  let logos = [];
+
+  const logoPromises = logoPaths.map(path => {
+    return fetch(path)
+      .then(res => res.text())
+      .then(svgText => {
+        // Parse the SVG text into a DOM document
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(svgText, "image/svg+xml");
+        // Set the fill attribute on every <path> element to rgba(255, 255, 255, .3)
+        doc.querySelectorAll("path").forEach(pathEl => {
+          pathEl.setAttribute("fill", "rgba(255, 255, 255, 0.15)");
+        });
+        // Serialize the updated SVG back to a string
+        const serializer = new XMLSerializer();
+        const newSvgText = serializer.serializeToString(doc);
+        // Create a Blob and object URL from the updated SVG text
+        const svgBlob = new Blob([newSvgText], { type: "image/svg+xml" });
+        const url = URL.createObjectURL(svgBlob);
+        // Create a new image with the updated SVG
+        const img = new Image();
+        img.src = url;
+        return new Promise((resolve, reject) => {
+          img.onload = () => {
+            URL.revokeObjectURL(url); // Optional: free up memory
+            resolve(img);
+          };
+          img.onerror = () => reject(new Error(`Failed to load modified SVG from ${path}`));
+        });
+      });
+  });
+
+  // const logoImage = new Image();
+  // logoImage.src = '/dist/img/logos/logo-react.svg';
+
+  let lastTime = performance.now();
   
   let ship = newShip();
 
@@ -40,64 +90,79 @@ export function initAsteroids() {
 
   function createAsteroidsBelt() {
     const shipAvoidanceRadius = ROIDS_SIZE;
-  
     roids = [];
-  
-    for (let i = 0; i < ROIDS_NUM; i++) {
+    
+    logos.forEach(logoImg => {
       let x, y;
       let validPlacement = false;
-  
+      
       while (!validPlacement) {
         x = Math.random() * (scaledWidth - ROIDS_SIZE * 2) + ROIDS_SIZE;
         y = Math.random() * (scaledHeight - ROIDS_SIZE * 2) + ROIDS_SIZE;
-  
+        
         if (distanceBetweenPoints(ship.x, ship.y, x, y) > shipAvoidanceRadius) {
           validPlacement = true;
         }
       }
-  
-      roids.push(newAsteroid(x, y, Math.ceil(ROIDS_SIZE / 2)));
-    }
+      
+      roids.push(newAsteroid(x, y, Math.ceil(ROIDS_SIZE / 2), logoImg));
+    });
   }
 
   function resetGame() {
     ship = newShip();
     createAsteroidsBelt();
   }
-  
+
   function destroyAsteroid(index) {
     let x = roids[index].x;
     let y = roids[index].y; 
     let r = roids[index].r;
-
-    // Split asteroid in two if needed
+    let logoImg = roids[index].img;
+  
     if (r == Math.ceil(ROIDS_SIZE / 2)) {
-      roids.push(newAsteroid(x, y, Math.ceil(ROIDS_SIZE / 4)));
-      roids.push(newAsteroid(x, y, Math.ceil(ROIDS_SIZE / 4)));
-    } else if (r == Math.ceil(ROIDS_SIZE / 4)) {
-      roids.push(newAsteroid(x, y, Math.ceil(ROIDS_SIZE / 8)));
-      roids.push(newAsteroid(x, y, Math.ceil(ROIDS_SIZE / 8)));
+      roids.push(newAsteroid(x, y, Math.ceil(ROIDS_SIZE / 3), logoImg));
+      roids.push(newAsteroid(x, y, Math.ceil(ROIDS_SIZE / 3), logoImg));
     }
-
+    
     roids.splice(index, 1);
   }
+  
+  // function destroyAsteroid(index) {
+  //   let x = roids[index].x;
+  //   let y = roids[index].y; 
+  //   let r = roids[index].r;
 
-  function newAsteroid(x, y, r) {
+  //   // Split asteroid in two if needed
+  //   if (r == Math.ceil(ROIDS_SIZE / 2)) {
+  //     roids.push(newAsteroid(x, y, Math.ceil(ROIDS_SIZE / 3)));
+  //     roids.push(newAsteroid(x, y, Math.ceil(ROIDS_SIZE / 3)));
+  //   }
+  //   // } else if (r == Math.ceil(ROIDS_SIZE / 4)) {
+  //   //   roids.push(newAsteroid(x, y, Math.ceil(ROIDS_SIZE / 8)));
+  //   //   roids.push(newAsteroid(x, y, Math.ceil(ROIDS_SIZE / 8)));
+  //   // }
+
+  //   roids.splice(index, 1);
+  // }
+
+  function newAsteroid(x, y, r, logoImg) {
     const roid = {
       x: x,
       y: y,
-      xv: Math.random() * ROIDS_SPEED / FPS * (Math.random() < 0.5 ? 1 : -1),
-      yv: Math.random() * ROIDS_SPEED / FPS * (Math.random() < 0.5 ? 1 : -1),
+      xv: Math.random() * ROIDS_SPEED * (Math.random() < 0.5 ? 1 : -1),
+      yv: Math.random() * ROIDS_SPEED * (Math.random() < 0.5 ? 1 : -1),
       r: r,
       a: Math.random() * Math.PI / 2,
       vert: Math.floor(Math.random() * (ROIDS_VERT + 1) + ROIDS_VERT / 2),
-      offs: []
-    }
-
+      offs: [],
+      img: logoImg
+    };
+  
     for (let i = 0; i < roid.vert; i++) {
       roid.offs.push(Math.random() * ROIDS_JAG * 2 + 1 - ROIDS_JAG);
     }
-
+  
     return roid;
   }
 
@@ -123,8 +188,8 @@ export function initAsteroids() {
       ship.lasers.push({
         x: ship.x + 4 / 3 * ship.r * Math.cos(ship.a),
         y: ship.y - 4 / 3 * ship.r * Math.sin(ship.a),
-        xv: LASER_SPEED * Math.cos(ship.a) / FPS,
-        yv: -LASER_SPEED * Math.sin(ship.a) / FPS,
+        xv: LASER_SPEED * Math.cos(ship.a),
+        yv: -LASER_SPEED * Math.sin(ship.a),
         dist: 0,
         explodeTime: 0
       });
@@ -147,56 +212,54 @@ export function initAsteroids() {
   };
   
   function onKeyDown(event) {
-    switch(event.key.toLowerCase()) {
-      case 'a': // Left
-        keys.left = true;
-        ship.rot = TURN_SPEED / 180 * Math.PI / FPS;
-        break;
-      case 'w': // Up
-        keys.up = true;
-        ship.thrusting = true;
-        break;
-      case 'd': // Right
-        keys.right = true;
-        ship.rot = -TURN_SPEED / 180 * Math.PI / FPS;
-        break;
-      case ' ':
-      case 'space':
-        shootLaser();
-        break;
+    const key = event.key.toLowerCase();
+  
+    if (key === 'a') {
+      keys.left = true;
+    } else if (key === 'w') {
+      keys.up = true;
+      ship.thrusting = true;
+    } else if (key === 'd') {
+      keys.right = true;
+    } else if (key === ' ' || key === 'space') {
+      shootLaser();
     }
+  
+    updateRotation();
   }
   
   function onKeyUp(event) {
-    switch(event.key.toLowerCase()) {
-      case 'a': // Left
-        keys.left = false;
-        if (keys.right) {
-          ship.rot = -TURN_SPEED / 180 * Math.PI / FPS;
-        } else {
-          ship.rot = 0;
-        }
-        break;
-      case 'w': // Up
-        keys.up = false;
-        ship.thrusting = false;
-        break;
-      case 'd': // Right
-        keys.right = false;
-        if (keys.left) {
-          ship.rot = TURN_SPEED / 180 * Math.PI / FPS;
-        } else {
-          ship.rot = 0;
-        }
-        break;
-      case ' ':
-      case 'space':
-        ship.canShoot = true;
-        break;
+    const key = event.key.toLowerCase();
+  
+    if (key === 'a') {
+      keys.left = false;
+    } else if (key === 'w') {
+      keys.up = false;
+      ship.thrusting = false;
+    } else if (key === 'd') {
+      keys.right = false;
+    } else if (key === ' ' || key === 'space') {
+      ship.canShoot = true;
+    }
+  
+    updateRotation();
+  }
+  
+  function updateRotation() {
+    if (keys.left && !keys.right) {
+      ship.rot = TURN_SPEED / 180 * Math.PI;
+    } else if (keys.right && !keys.left) {
+      ship.rot = -TURN_SPEED / 180 * Math.PI;
+    } else {
+      ship.rot = 0;
     }
   }
 
   function update() {
+    let now = performance.now();
+    let deltaTime = (now - lastTime) / 1000;
+    lastTime = now;
+
     let blinkOn = ship.blinkNum % 2 == 0;
     let exploding = ship.explodeTime > 0;
 
@@ -207,11 +270,17 @@ export function initAsteroids() {
     }
 
     if (ship.thrusting) {
-      ship.thrust.x += SHIP_THRUST * Math.cos(ship.a) / FPS;
-      ship.thrust.y -= SHIP_THRUST * Math.sin(ship.a) / FPS;
+      ship.thrust.x += SHIP_THRUST * Math.cos(ship.a) * deltaTime;
+      ship.thrust.y -= SHIP_THRUST * Math.sin(ship.a) * deltaTime;
     } else {
-      ship.thrust.x -= FRICTION * ship.thrust.x / FPS;
-      ship.thrust.y -= FRICTION * ship.thrust.y / FPS;
+      ship.thrust.x -= FRICTION * ship.thrust.x * deltaTime;
+      ship.thrust.y -= FRICTION * ship.thrust.y * deltaTime;
+    }
+
+    const speed = Math.sqrt(ship.thrust.x ** 2 + ship.thrust.y ** 2);
+    if (speed > SHIP_MAX_SPEED) {
+      ship.thrust.x = (ship.thrust.x / speed) * SHIP_MAX_SPEED;
+      ship.thrust.y = (ship.thrust.y / speed) * SHIP_MAX_SPEED;
     }
 
     if (!exploding) {
@@ -326,30 +395,10 @@ export function initAsteroids() {
 
     // Draw the asteroids
     roids.forEach(roid => {
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-      ctx.lineWidth = SHIP_SIZE / 20;
-      ctx.beginPath();
-      ctx.moveTo(
-        roid.x + roid.r * roid.offs[0] * Math.cos(roid.a),
-        roid.y + roid.r * roid.offs[0] * Math.sin(roid.a)
-      );
-    
-      for (let i = 1; i < roid.vert; i++) {
-        ctx.lineTo(
-          roid.x + roid.r * roid.offs[i] * Math.cos(roid.a + i * Math.PI * 2 / roid.vert),
-          roid.y + roid.r * roid.offs[i] * Math.sin(roid.a + i * Math.PI * 2 / roid.vert)
-        );
-      }
-    
-      ctx.closePath();
-      ctx.stroke();
-
-      if (SHOW_BOUNDING) {
-        ctx.strokeStyle = 'red';
-        ctx.beginPath();
-        ctx.arc(roid.x, roid.y, roid.r, 0, Math.PI * 2, false);
-        ctx.stroke();
-      }
+      ctx.save();
+      ctx.translate(roid.x, roid.y);
+      ctx.drawImage(roid.img, -roid.r, -roid.r, roid.r * 2, roid.r * 2);
+      ctx.restore();
     });
 
     if (SHOW_CENTER_DOT) {
@@ -417,7 +466,7 @@ export function initAsteroids() {
       }
 
       // Rotate ship
-      ship.a += ship.rot;
+      ship.a += ship.rot * deltaTime;
   
       // Move ship
       ship.x += ship.thrust.x;
@@ -457,9 +506,9 @@ export function initAsteroids() {
           continue;
         }
       } else {
-        ship.lasers[i].x += ship.lasers[i].xv;
-        ship.lasers[i].y += ship.lasers[i].yv;
-        ship.lasers[i].dist += Math.sqrt(Math.pow(ship.lasers[i].xv, 2) + Math.pow(ship.lasers[i].yv, 2));
+        ship.lasers[i].x += ship.lasers[i].xv * deltaTime;
+        ship.lasers[i].y += ship.lasers[i].yv * deltaTime;
+        ship.lasers[i].dist += Math.sqrt(Math.pow(ship.lasers[i].xv, 2) + Math.pow(ship.lasers[i].yv, 2)) * deltaTime;
       }
 
       if (ship.lasers[i].x < 0) {
@@ -476,8 +525,8 @@ export function initAsteroids() {
 
     roids.forEach(roid => {
       // Move the asteroids
-      roid.x += roid.xv;
-      roid.y += roid.yv;
+      roid.x += roid.xv * deltaTime;
+      roid.y += roid.yv * deltaTime;
 
       // Handle edges
       if (roid.x < -roid.r) {
@@ -530,8 +579,15 @@ export function initAsteroids() {
     });
   }
   
-  resizeCanvas();
-  update();
-  
-  windowResizeControl.subscribe(resizeCanvas);
+  Promise.all(logoPromises)
+    .then(loadedImages => {
+      logos = loadedImages;
+      createAsteroidsBelt();
+      resizeCanvas();
+      update();
+      windowResizeControl.subscribe(resizeCanvas);
+    })
+    .catch(err => {
+      console.error(err);
+    });
 }
