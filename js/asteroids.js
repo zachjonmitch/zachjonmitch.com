@@ -20,7 +20,7 @@ export function initAsteroids() {
   const SHIP_THRUST = 5;
   const SHIP_MAX_SPEED = 8;
   const TURN_SPEED = 360;
-  const SHOW_BOUNDING = false;
+  const SHOW_BOUNDING = true;
   const SHOW_CENTER_DOT = false;
   
   const canvas = document.querySelector('[data-ui-canvas-game]');
@@ -234,7 +234,7 @@ export function initAsteroids() {
 
   function update() {
     let now = performance.now();
-    let deltaTime = Math.min((now - lastTime) / 1000, 1 / 30);
+    let deltaTime = (now - lastTime) / 1000;
     lastTime = now;
 
     let blinkOn = ship.blinkNum % 2 == 0;
@@ -256,9 +256,8 @@ export function initAsteroids() {
 
     const speed = Math.sqrt(ship.thrust.x ** 2 + ship.thrust.y ** 2);
     if (speed > SHIP_MAX_SPEED) {
-      let scale = SHIP_MAX_SPEED / speed;
-      ship.thrust.x *= scale;
-      ship.thrust.y *= scale;
+      ship.thrust.x = (ship.thrust.x / speed) * SHIP_MAX_SPEED;
+      ship.thrust.y = (ship.thrust.y / speed) * SHIP_MAX_SPEED;
     }
 
     if (!exploding) {
@@ -375,9 +374,19 @@ export function initAsteroids() {
     roids.forEach(roid => {
       ctx.save();
       ctx.translate(roid.x, roid.y);
+      
       ctx.drawImage(roid.img, -roid.r, -roid.r, roid.r * 2, roid.r * 2);
+      
+      if (SHOW_BOUNDING) {
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(0, 0, roid.r, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    
       ctx.restore();
-    });
+    });    
 
     if (SHOW_CENTER_DOT) {
       ctx.fillStyle = 'red';
@@ -447,8 +456,8 @@ export function initAsteroids() {
       ship.a += ship.rot * deltaTime;
   
       // Move ship
-      ship.x += ship.thrust.x;
-      ship.y += ship.thrust.y;
+      ship.x += ship.thrust.x * deltaTime;
+      ship.y += ship.thrust.y * deltaTime;
     } else {
       ship.explodeTime--;
 
