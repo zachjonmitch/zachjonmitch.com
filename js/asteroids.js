@@ -20,7 +20,7 @@ export function initAsteroids() {
   const SHIP_THRUST = 5;
   const SHIP_MAX_SPEED = 8;
   const TURN_SPEED = 360;
-  const SHOW_BOUNDING = true;
+  const SHOW_BOUNDING = false;
   const SHOW_CENTER_DOT = false;
   
   const canvas = document.querySelector('[data-ui-canvas-game]');
@@ -456,8 +456,8 @@ export function initAsteroids() {
       ship.a += ship.rot * deltaTime;
   
       // Move ship
-      ship.x += ship.thrust.x * deltaTime;
-      ship.y += ship.thrust.y * deltaTime;
+      ship.x += ship.thrust.x;
+      ship.y += ship.thrust.y;
     } else {
       ship.explodeTime--;
 
