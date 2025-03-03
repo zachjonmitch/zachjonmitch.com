@@ -18,7 +18,7 @@ export function initAsteroids() {
   const SHIP_INV_DURATION = 3;
   const SHIP_SIZE = 35;
   const SHIP_THRUST = 5;
-  const SHIP_MAX_SPEED = 8;
+  const SHIP_MAX_SPEED = 9;
   const TURN_SPEED = 360;
   const SHOW_BOUNDING = false;
   const SHOW_CENTER_DOT = false;
