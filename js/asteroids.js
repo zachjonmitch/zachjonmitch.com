@@ -11,11 +11,11 @@ export function initAsteroids() {
   const ROIDS_NUM = 8;
   const ROIDS_SIZE = 100;
   const ROIDS_SPEED = 50;
-  const ROIDS_VERT = 10; // Average number of vertices on each asteroid
-  const ROIDS_JAG = 0.4; // Jaggedness of the asteriods
+  const ROIDS_VERT = 10;
+  const ROIDS_JAG = 0.4;
   const SHIP_EXPLODE_DURATION = 0.3;
-  const SHIP_BLINK_DURATION = 0.1; // Duration of ships blink during invincibility
-  const SHIP_INV_DURATION = 3; // Duration of ships invincibility
+  const SHIP_BLINK_DURATION = 0.1;
+  const SHIP_INV_DURATION = 3;
   const SHIP_SIZE = 35;
   const SHIP_THRUST = 5;
   const SHIP_MAX_SPEED = 8;
@@ -49,34 +49,29 @@ export function initAsteroids() {
     return fetch(path)
       .then(res => res.text())
       .then(svgText => {
-        // Parse the SVG text into a DOM document
         const parser = new DOMParser();
         const doc = parser.parseFromString(svgText, "image/svg+xml");
-        // Set the fill attribute on every <path> element to rgba(255, 255, 255, .3)
+
         doc.querySelectorAll("path").forEach(pathEl => {
           pathEl.setAttribute("fill", "rgba(255, 255, 255, 0.15)");
         });
-        // Serialize the updated SVG back to a string
+
         const serializer = new XMLSerializer();
         const newSvgText = serializer.serializeToString(doc);
-        // Create a Blob and object URL from the updated SVG text
         const svgBlob = new Blob([newSvgText], { type: "image/svg+xml" });
         const url = URL.createObjectURL(svgBlob);
-        // Create a new image with the updated SVG
         const img = new Image();
         img.src = url;
+
         return new Promise((resolve, reject) => {
           img.onload = () => {
-            URL.revokeObjectURL(url); // Optional: free up memory
+            URL.revokeObjectURL(url);
             resolve(img);
           };
           img.onerror = () => reject(new Error(`Failed to load modified SVG from ${path}`));
         });
       });
   });
-
-  // const logoImage = new Image();
-  // logoImage.src = '/dist/img/logos/logo-react.svg';
 
   let lastTime = performance.now();
   
@@ -127,24 +122,6 @@ export function initAsteroids() {
     
     roids.splice(index, 1);
   }
-  
-  // function destroyAsteroid(index) {
-  //   let x = roids[index].x;
-  //   let y = roids[index].y; 
-  //   let r = roids[index].r;
-
-  //   // Split asteroid in two if needed
-  //   if (r == Math.ceil(ROIDS_SIZE / 2)) {
-  //     roids.push(newAsteroid(x, y, Math.ceil(ROIDS_SIZE / 3)));
-  //     roids.push(newAsteroid(x, y, Math.ceil(ROIDS_SIZE / 3)));
-  //   }
-  //   // } else if (r == Math.ceil(ROIDS_SIZE / 4)) {
-  //   //   roids.push(newAsteroid(x, y, Math.ceil(ROIDS_SIZE / 8)));
-  //   //   roids.push(newAsteroid(x, y, Math.ceil(ROIDS_SIZE / 8)));
-  //   // }
-
-  //   roids.splice(index, 1);
-  // }
 
   function newAsteroid(x, y, r, logoImg) {
     const roid = {
@@ -169,7 +146,7 @@ export function initAsteroids() {
   function newShip() {
     return {
       x: 15 + SHIP_SIZE / 2,
-      y: scaledHeight - 15 - SHIP_SIZE / 2, // Fixed calculation every time
+      y: scaledHeight - 15 - SHIP_SIZE / 2,
       r: SHIP_SIZE / 2,
       a: 90 / 180 * Math.PI,
       blinkNum: Math.ceil(SHIP_INV_DURATION / SHIP_BLINK_DURATION),
@@ -257,7 +234,7 @@ export function initAsteroids() {
 
   function update() {
     let now = performance.now();
-    let deltaTime = (now - lastTime) / 1000;
+    let deltaTime = Math.min((now - lastTime) / 1000, 1 / 30);
     lastTime = now;
 
     let blinkOn = ship.blinkNum % 2 == 0;
@@ -279,8 +256,9 @@ export function initAsteroids() {
 
     const speed = Math.sqrt(ship.thrust.x ** 2 + ship.thrust.y ** 2);
     if (speed > SHIP_MAX_SPEED) {
-      ship.thrust.x = (ship.thrust.x / speed) * SHIP_MAX_SPEED;
-      ship.thrust.y = (ship.thrust.y / speed) * SHIP_MAX_SPEED;
+      let scale = SHIP_MAX_SPEED / speed;
+      ship.thrust.x *= scale;
+      ship.thrust.y *= scale;
     }
 
     if (!exploding) {
@@ -579,6 +557,7 @@ export function initAsteroids() {
     });
   }
   
+  // Start the game
   Promise.all(logoPromises)
     .then(loadedImages => {
       logos = loadedImages;
