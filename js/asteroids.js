@@ -1,5 +1,12 @@
 import { windowResizeController } from "./utils/window-resize-controller.js";
 
+export function startAsteroids() {
+  setTimeout(() => {
+    initAsteroids();
+    blinkGameElements(4);
+  }, 3000);
+}
+
 export function initAsteroids() {
   const PIXEL_RATIO = window.devicePixelRatio || 1;
   const FPS = 60;
@@ -83,6 +90,55 @@ export function initAsteroids() {
   document.addEventListener('keydown', onKeyDown);
   document.addEventListener('keyup', onKeyUp);
 
+  document.querySelectorAll('[data-ui-game-controls-key]').forEach(button => {
+    const key = button.getAttribute('data-ui-game-controls-key');
+  
+    button.addEventListener('mousedown', () => {
+      if (key === 'w') {
+        keys.up = true;
+        ship.thrusting = true;
+      } else if (key === 'a') {
+        keys.left = true;
+      } else if (key === 'd') {
+        keys.right = true;
+      } else if (key === 'space') {
+        shootLaser();
+      }
+  
+      updateRotation();
+    });
+  
+    button.addEventListener('mouseup', () => {
+      if (key === 'w') {
+        keys.up = false;
+        ship.thrusting = false;
+      } else if (key === 'a') {
+        keys.left = false;
+      } else if (key === 'd') {
+        keys.right = false;
+      } else if (key === 'space') {
+        ship.canShoot = true;
+      }
+  
+      updateRotation();
+    });
+  
+    button.addEventListener('mouseleave', () => {
+      if (key === 'w') {
+        keys.up = false;
+        ship.thrusting = false;
+      } else if (key === 'a') {
+        keys.left = false;
+      } else if (key === 'd') {
+        keys.right = false;
+      } else if (key === 'space') {
+        ship.canShoot = true;
+      }
+  
+      updateRotation();
+    });
+  });
+
   function createAsteroidsBelt() {
     const shipAvoidanceRadius = ROIDS_SIZE;
     roids = [];
@@ -108,6 +164,16 @@ export function initAsteroids() {
     ship = newShip();
     createAsteroidsBelt();
   }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      resetGame();
+    }
+  });
+  
+  window.addEventListener('beforeunload', () => {
+    resetGame();
+  });
 
   function destroyAsteroid(index) {
     let x = roids[index].x;
@@ -578,4 +644,22 @@ export function initAsteroids() {
     .catch(err => {
       console.error(err);
     });
+}
+
+function blinkGameElements(times) {
+  let count = 0;
+  const elements = [
+    document.querySelector('[data-ui-canvas-game]'),
+    document.querySelector('[data-ui-game-controls]'),
+  ];
+
+  const interval = setInterval(() => {
+    elements.forEach(el => el.classList.toggle('d-none'));
+    count++;
+
+    if (count >= times * 2) {
+      clearInterval(interval);
+      elements.forEach(el => el.classList.remove('d-none'));
+    }
+  }, 180);
 }

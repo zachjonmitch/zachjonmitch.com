@@ -167,12 +167,25 @@ button {
   font-size: 16px;
   text-transform: uppercase;
   background-color: black;
+  cursor: variables.$cursor-pointer;
+  user-select: none;
+}
+
+.game-controls__key:hover {
+  background-color: variables.$color-green;
+  border: 1px solid variables.$color-green;
+  color: black;
+}
+
+.game-controls__key:active {
+  box-shadow: rgb(0, 0, 0) 1px 1px 7px inset;
 }
 
 .game-controls__key--active {
   background-color: variables.$color-green;
   border: 1px solid variables.$color-green;
   color: black;
+  box-shadow: rgb(0, 0, 0) 1px 1px 7px inset;
 }
 
 .game-controls__key--w {
@@ -180,20 +193,45 @@ button {
   grid-row: 1;
 }
 
+// .game-controls__key--w:hover,
+// .game-controls__key--active.game-controls__key--w {
+//   background-color: #1874c8;
+//   border: 1px solid #1874c8;
+// }
+
+
 .game-controls__key--a {
   grid-column: 1;
   grid-row: 2;
 }
+
+// .game-controls__key--a:hover,
+// .game-controls__key--active.game-controls__key--a {
+//   background-color: #1dcb83;
+//   border: 1px solid #1dcb83;
+// }
 
 .game-controls__key--s {
   grid-column: 2;
   grid-row: 2;
 }
 
+// .game-controls__key--s:hover,
+// .game-controls__key--active.game-controls__key--s {
+//   background-color: #fedb32;
+//   border: 1px solid #fedb32;
+// }
+
 .game-controls__key--d {
   grid-column: 3;
   grid-row: 2;
 }
+
+// .game-controls__key--d:hover,
+// .game-controls__key--active.game-controls__key--d {
+//   background-color: #f55748;
+//   border: 1px solid #f55748;
+// }
 
 .game-controls__key--space {
   height: 30px;
@@ -202,6 +240,12 @@ button {
   text-transform: uppercase;
   width: 100%;
 }
+
+// .game-controls__key--space:hover,
+// .game-controls__key--active.game-controls__key--space {
+//   background-color: #fedb32;
+//   border: 1px solid #fedb32;
+// }
 
 .hero {
   height: 100vh;
@@ -390,6 +434,10 @@ button {
   backface-visibility: hidden;
   background-attachment: fixed;
   image-rendering: -webkit-optimize-contrast;
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+  width: 100%;
 
   @include mixins.min-width(lg) {
     filter: grayscale(100%);
@@ -402,38 +450,27 @@ button {
 
 .work-box--g2-sell .work-box__slide {
   background-image: url('/dist/img/screenshot-g2-sell.jpg');
-  background-size: cover;
-  background-position: top;
-  background-repeat: no-repeat;
   aspect-ratio: 1100 / 5835;
-  width: 100%;
 }
 
 .work-box--rmr .work-box__slide {
   background-image: url('/dist/img/screenshot-rmr.jpg');
-  background-size: cover;
-  background-position: top;
-  background-repeat: no-repeat;
   aspect-ratio: 1100 / 3603;
-  width: 100%;
 }
 
 .work-box--rrfc .work-box__slide {
   background-image: url('/dist/img/screenshot-rrfc.jpg');
-  background-size: cover;
-  background-position: top;
-  background-repeat: no-repeat;
   aspect-ratio: 1100 / 8194;
-  width: 100%;
+}
+
+.work-box--g2-best-software .work-box__slide {
+  background-image: url('/dist/img/screenshot-g2-best-software.jpg');
+  aspect-ratio: 1100 / 3240;
 }
 
 .work-box--g2-reach .work-box__slide {
   background-image: url('/dist/img/screenshot-g2-reach.jpg');
-  background-size: cover;
-  background-position: top;
-  background-repeat: no-repeat;
   aspect-ratio: 1100 / 5988;
-  width: 100%;
 }
 
 .work-info {

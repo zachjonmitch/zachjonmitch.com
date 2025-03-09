@@ -1,4 +1,5 @@
 import { initAsteroids } from "./asteroids.js";
+import { startAsteroids } from "./asteroids.js";
 import { windowResizeController } from "./utils/window-resize-controller.js";
 import { windowScrollController } from "./utils/window-scroll-controller.js";
 import { pauseController } from "./utils/pause-controller.js";
@@ -8,7 +9,7 @@ import { observeElements } from "./utils/observe-elements.js";
 document.addEventListener('DOMContentLoaded', () => {
   initSiteBackground();
   initParallax();
-  initAsteroids();
+  startAsteroids();
   initGameKeys();
   initMobileMenu();
   initAnchorScroll();

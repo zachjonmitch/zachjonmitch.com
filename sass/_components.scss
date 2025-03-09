@@ -327,6 +327,7 @@
 
 .zm-navbar__brand-headshot {
   animation: rotate 10s linear infinite;
+  user-select: none;
 }
 
 .zm-navbar__toggle {
@@ -403,7 +404,7 @@
 .zm-socials__list {
   list-style-type: none;
   display: flex;
-  gap: 22px;
+  gap: 18px;
   justify-content: center;
 }
 
@@ -419,6 +420,11 @@
   display: block;
   position: relative;
   color: variables.$color-green;
+}
+
+.zm-socials__icon--upwork {
+  width: 16px;
+  height: 16px;
 }
 
 .hero__first-name,
