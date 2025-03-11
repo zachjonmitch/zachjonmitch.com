@@ -1,11 +1,57 @@
 import { windowResizeController } from "./utils/window-resize-controller.js";
 
 export function startAsteroids() {
-  setTimeout(() => {
-    initAsteroids();
-    blinkGameElements(4);
-  }, 3000);
+  let isGameRunning = false;
+  let resizeTimeout;
+  const windowResizeControl = windowResizeController();
+
+  function handleResize() {
+    if (window.innerWidth > 992) {
+      if (!isGameRunning) {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+          fadeInGameElements(800);
+          initAsteroids();
+          isGameRunning = true;
+        }, 3000);
+      }
+    } else {
+      clearTimeout(resizeTimeout);
+      hideGame();
+      isGameRunning = false;
+    }
+  }
+
+  function hideGame() {
+    const elements = [
+      document.querySelector('[data-ui-canvas-game]'),
+      document.querySelector('[data-ui-game-controls]')
+    ];
+    elements.forEach(el => {
+      el.style.opacity = '';
+      el.style.transition = '';
+      el.classList.add('d-none');
+    });
+  }
+
+  function fadeInGameElements(duration) {
+    const elements = [
+      document.querySelector('[data-ui-canvas-game]'),
+      document.querySelector('[data-ui-game-controls]')
+    ];
+    elements.forEach(el => {
+      el.classList.remove('d-none');
+      el.style.opacity = 0;
+      el.style.transition = `opacity ${duration}ms ease-in-out`;
+      void el.offsetWidth;
+      el.style.opacity = 1;
+    });
+  }
+
+  windowResizeControl.subscribe(handleResize);
+  handleResize();
 }
+
 
 export function initAsteroids() {
   const PIXEL_RATIO = window.devicePixelRatio || 1;
@@ -22,7 +68,7 @@ export function initAsteroids() {
   const ROIDS_JAG = 0.4;
   const SHIP_EXPLODE_DURATION = 0.3;
   const SHIP_BLINK_DURATION = 0.1;
-  const SHIP_INV_DURATION = 3;
+  const SHIP_INV_DURATION = 2.5;
   const SHIP_SIZE = 35;
   const SHIP_THRUST = 5;
   const SHIP_MAX_SPEED = 9;
@@ -644,22 +690,4 @@ export function initAsteroids() {
     .catch(err => {
       console.error(err);
     });
-}
-
-function blinkGameElements(times) {
-  let count = 0;
-  const elements = [
-    document.querySelector('[data-ui-canvas-game]'),
-    document.querySelector('[data-ui-game-controls]'),
-  ];
-
-  const interval = setInterval(() => {
-    elements.forEach(el => el.classList.toggle('d-none'));
-    count++;
-
-    if (count >= times * 2) {
-      clearInterval(interval);
-      elements.forEach(el => el.classList.remove('d-none'));
-    }
-  }, 180);
 }
