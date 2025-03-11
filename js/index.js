@@ -294,7 +294,7 @@ function initAnchorScroll() {
 
     if (!targetElement) return;
 
-    const offset = 40;
+    const offset = 0;
     const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
 
     window.scrollTo({
