@@ -59,7 +59,7 @@ function initSiteBackground() {
     ctx.scale(pixelRatio, pixelRatio);
 
     patternHeight = window.innerHeight * 0.3;
-    ctx.imageSmoothingEnabled = false;
+    ctx.imageSmoothingEnabled = true;
   }
 
   function draw(currentTime) {
